@@ -44,8 +44,6 @@ fun PagerIndicator(
 }
 
 
-// ... existing code ...
-
 @Preview(showBackground = true)
 @Composable
 fun PagerIndicatorPreview() {
