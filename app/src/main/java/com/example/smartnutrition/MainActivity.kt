@@ -16,8 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartnutrition.domain.usecases.app_entry.AppEntryUseCases
 import com.example.smartnutrition.presentation.onboarding.OnBoardingScreen
+import com.example.smartnutrition.presentation.onboarding.OnBoardingViewModel
 import com.example.smartnutrition.ui.theme.SmartNutritionTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -40,7 +42,8 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) {
-                    OnBoardingScreen()
+                    val viewModel: OnBoardingViewModel = hiltViewModel()
+                    OnBoardingScreen(onEvent = viewModel::onEvent)
                 }
             }
         }

@@ -11,9 +11,8 @@ import com.example.smartnutrition.util.Constans
 import com.example.smartnutrition.util.Constans.USER_SETTINGS
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class LocalUserMengerlmpl @Inject constructor(
+class LocalUserMengerlmpl(
     private val context: Context
 ):LocalUserManger {
     override fun readAppEntry(): Flow<Boolean> {
@@ -23,8 +22,8 @@ class LocalUserMengerlmpl @Inject constructor(
     }
 
     override suspend fun saveAppEntry() {
-        context.dataStore.edit { preferences ->
-            preferences[PreferenceKeys.APP_ENTRY] = true
+        context.dataStore.edit { setting ->
+            setting[PreferenceKeys.APP_ENTRY] = true
         }
     }
 }
