@@ -7,6 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.smartnutrition.presentation.home.HomeScreen
+import com.example.smartnutrition.presentation.home.HomeViewModel
 import com.example.smartnutrition.presentation.onboarding.OnBoardingScreen
 import com.example.smartnutrition.presentation.onboarding.OnBoardingViewModel
 
@@ -27,14 +30,18 @@ fun NavGraph(
             }
         }
 
-        navigation(
-            route = Route.NewsNavigation.route,
-            startDestination = Route.HomeScreen.route
-        ) {
-            composable(route = Route.HomeScreen.route) {
-            }
-            composable(route = Route.DetailsScreen.route) {
-            }
+        composable(route = Route.HomeScreen.route) {
+            val viewModel: HomeViewModel = hiltViewModel()
+            HomeScreen (
+                articles = viewModel.news.collectAsLazyPagingItems(),
+                navigate = { url ->
+                    navController.navigate(Route.DetailsScreen.route)
+                }
+            )
+        }
+
+        composable(route = Route.DetailsScreen.route) {
+            // Details screen implementation
         }
     }
 }
