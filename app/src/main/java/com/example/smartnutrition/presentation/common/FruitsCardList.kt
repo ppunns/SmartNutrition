@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -31,8 +32,10 @@ fun FruitsCardList(
     if (handlePagingResult) {
         LazyColumn(
             modifier = modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.Start,
             contentPadding = PaddingValues(all = ExtraSmallPadding2),
-            verticalArrangement = Arrangement.spacedBy(MediumPadding1)
+            verticalArrangement = Arrangement.spacedBy(15.dp, Alignment.Top)
+
         ) {
             items(count = fruits.itemCount){
                 fruits[it]?.let { article ->

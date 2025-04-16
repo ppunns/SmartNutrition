@@ -1,20 +1,29 @@
 package com.example.smartnutrition.presentation.home.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.smartnutrition.R
 import com.example.smartnutrition.domain.model.Article
 import com.example.smartnutrition.domain.model.Source
+import com.example.smartnutrition.ui.theme.Natural100
+import com.example.smartnutrition.ui.theme.Natural300
+import com.example.smartnutrition.ui.theme.Natural50
 import com.example.smartnutrition.ui.theme.SmartNutritionTheme
 
 
@@ -28,35 +37,50 @@ fun FruitsCard(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .fillMaxWidth(),
+//            .background(Color(0xFF8BB3FF))
+//            .height(120.dp)  // Added fixed height
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        colors = CardDefaults.cardColors(containerColor = Natural100)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .height(80.dp)
+                .padding(16.dp)
+                .fillMaxHeight(),
             horizontalArrangement = Arrangement.spacedBy(11.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AsyncImage(
-                model = article.urlToImage,
-                contentDescription = article.title,
-                modifier = Modifier.size(60.dp),
-                contentScale = ContentScale.Crop
-            )
+            Box(
+                modifier = Modifier
+                    .size(49.dp)  // Adjusted size to fit smaller card
+                    .clip(CircleShape)
+            ) {
+                AsyncImage(
+                    model = article.urlToImage,
+                    contentDescription = article.title,
+                    modifier = Modifier.fillMaxSize(),  // Fill the box
+                    contentScale = ContentScale.Crop
+                )
+            }
+
             Column {
                 Text(
                     text = article.title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    maxLines = 2
+                    maxLines = 1,
+                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = article.publishedAt,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
@@ -80,5 +104,60 @@ fun FruitsCardPreview() {
                 urlToImage = ""
             )
         )
+    }
+}
+
+
+
+@Composable
+fun FruitCard2(
+    modifier: Modifier = Modifier,
+    article: Article,
+    onClick: (() -> Unit)? = null
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Fruit image or fallback colored circle
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFF8BB3FF) )
+            ) {
+
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // Fruit information
+            Column {
+                Text(
+                    text = "Mengga",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.DarkGray
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = "asdasda",
+                    fontSize = 16.sp,
+                    color = Color.Gray
+                )
+            }
+        }
     }
 }
