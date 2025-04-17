@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartnutrition.ui.theme.SmartNutritionTheme
 
+
 @Composable
 fun CalorieProgressCard(
     modifier: Modifier = Modifier,
@@ -34,7 +35,7 @@ fun CalorieProgressCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             modifier = Modifier

@@ -1,5 +1,6 @@
 package com.example.smartnutrition.presentation.home.components
 
+import android.graphics.fonts.FontFamily
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,15 +72,26 @@ fun FruitsCard(
             Column {
                 Text(
                     text = article.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(600),
+                        color = Color(0xFF1F2024),
+
+                        ),
                     maxLines = 1,
                      overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = article.publishedAt,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        lineHeight = 16.sp,
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF494A50),
+
+                        letterSpacing = 0.1.sp,
+                    ),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
