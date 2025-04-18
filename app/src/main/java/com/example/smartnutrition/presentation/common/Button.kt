@@ -1,7 +1,9 @@
 package com.example.smartnutrition.presentation.common
 
+
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,6 +18,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+
+
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import com.example.smartnutrition.R
+import com.example.smartnutrition.ui.theme.SmartNutritionTheme
 
 @Composable
 fun PrimaryButton(
@@ -69,3 +81,41 @@ fun OutlinedButton(
         )
     }
 }
+
+@Composable
+fun PrimaryFloatingActionButton(
+    onClick: () -> Unit,
+    icon: Int,  // Changed to Int for R.drawable resource ID
+    contentDescription: String,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(59.dp),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                painter = painterResource(id = icon),  // Changed to use painterResource
+                contentDescription = contentDescription,
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "Scan Buah",
+                style = MaterialTheme.typography.labelLarge.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+    }
+}
+
+

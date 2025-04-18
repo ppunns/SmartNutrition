@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartnutrition.ui.theme.Blue50
 
 @Composable
 fun NutritionIndicatorCard(
@@ -26,7 +27,7 @@ fun NutritionIndicatorCard(
             .fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF5F5F5)
+            containerColor = Blue50
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp

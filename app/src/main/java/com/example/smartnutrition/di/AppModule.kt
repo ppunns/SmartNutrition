@@ -1,6 +1,8 @@
 package com.example.smartnutrition.di
 
 import android.app.Application
+import android.content.Context
+import androidx.camera.core.ImageCapture
 import com.example.smartnutrition.data.manager.LocalUserMengerlmpl
 import com.example.smartnutrition.data.remote.NewsAPI
 import com.example.smartnutrition.data.repository.NewsRepositorylmpl

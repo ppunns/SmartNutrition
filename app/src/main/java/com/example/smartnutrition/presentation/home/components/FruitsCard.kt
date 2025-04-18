@@ -24,6 +24,7 @@ import coil.compose.AsyncImage
 import com.example.smartnutrition.R
 import com.example.smartnutrition.domain.model.Article
 import com.example.smartnutrition.domain.model.Source
+import com.example.smartnutrition.ui.theme.Blue50
 import com.example.smartnutrition.ui.theme.Natural100
 import com.example.smartnutrition.ui.theme.Natural300
 import com.example.smartnutrition.ui.theme.Natural50
@@ -45,7 +46,7 @@ fun FruitsCard(
 //            .height(120.dp)  // Added fixed height
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        colors = CardDefaults.cardColors(containerColor = Natural100)
+        colors = CardDefaults.cardColors(containerColor = Blue50)
     ) {
         Row(
             modifier = Modifier
