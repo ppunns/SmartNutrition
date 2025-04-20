@@ -41,6 +41,9 @@ fun NavGraph(
                 }
             )
         }
+        composable(route = Route.CameraScanning.route) {
+            
+        }
 
         composable(route = Route.DetailsScreen.route) {
             // Details screen implementation

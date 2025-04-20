@@ -106,14 +106,15 @@ fun HomeScreen(
 
         // Add these imports
         
+        // Di dalam PrimaryFloatingActionButton onClick
         PrimaryFloatingActionButton(
-            onClick = { navigate(Route.CameraScanning.route) },
-            icon = R.drawable.scanicons,
-            contentDescription = "Scan Food",
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 24.dp)
-                .align(Alignment.BottomCenter)
-                .width(280.dp)
+        onClick = { navigate(Route.CameraScanning.route) },
+        icon = R.drawable.scanicons,
+        contentDescription = "Scan Food",
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 24.dp)
+            .align(Alignment.BottomCenter)
+            .width(280.dp)
         )
     }
 }
