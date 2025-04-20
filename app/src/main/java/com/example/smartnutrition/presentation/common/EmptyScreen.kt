@@ -1,7 +1,6 @@
 package com.example.smartnutrition.presentation.common
 
 import android.content.res.Configuration
-import android.view.animation.AlphaAnimation
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme

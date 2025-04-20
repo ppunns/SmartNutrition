@@ -1,6 +1,4 @@
 package com.example.smartnutrition.presentation.onboarding
-
-import android.media.metrics.Event
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartnutrition.domain.usecases.app_entry.AppEntryUseCases
