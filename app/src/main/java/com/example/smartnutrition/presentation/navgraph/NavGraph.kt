@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.smartnutrition.presentation.camera.CameraScreen
 import com.example.smartnutrition.presentation.home.HomeScreen
 import com.example.smartnutrition.presentation.home.HomeViewModel
 import com.example.smartnutrition.presentation.onboarding.OnBoardingScreen
@@ -36,13 +37,14 @@ fun NavGraph(
             val viewModel: HomeViewModel = hiltViewModel()
             HomeScreen (
                 articles = viewModel.news.collectAsLazyPagingItems(),
-                navigate = { url ->
-                    navController.navigate(Route.DetailsScreen.route)
+                navigate = { destination ->
+                    navController.navigate(destination)
                 }
             )
         }
+        
         composable(route = Route.CameraScanning.route) {
-            
+            CameraScreen()
         }
 
         composable(route = Route.DetailsScreen.route) {

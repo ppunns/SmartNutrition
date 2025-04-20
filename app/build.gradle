@@ -81,8 +81,7 @@ dependencies {
         implementation("androidx.camera:camera-camera2:${camerax_version}")
         implementation("androidx.camera:camera-lifecycle:${camerax_version}")
         implementation("androidx.camera:camera-view:${camerax_version}")
-
-
+    implementation "com.google.accompanist:accompanist-permissions:0.32.0"
 
     //Splash Api
     implementation "androidx.core:core-splashscreen:1.0.1"

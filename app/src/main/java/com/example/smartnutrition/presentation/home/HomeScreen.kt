@@ -36,15 +36,26 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartnutrition.R
+import com.example.smartnutrition.presentation.camera.CameraScreen
 import com.example.smartnutrition.presentation.common.PrimaryFloatingActionButton
 import com.example.smartnutrition.presentation.navgraph.Route
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
     articles: LazyPagingItems<Article>,
     navigate:(String) -> Unit
 ) {
+    val cameraPermissionState: PermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+    
+    // Removed MainContent call here to avoid showing CameraScreen in HomeScreen
+    
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -56,7 +67,7 @@ fun HomeScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp),  // Removed statusBarsPadding from here
+                    .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 item {
@@ -103,19 +114,45 @@ fun HomeScreen(
                 }
             }
         }
-
-        // Add these imports
         
-        // Di dalam PrimaryFloatingActionButton onClick
         PrimaryFloatingActionButton(
-        onClick = { navigate(Route.CameraScanning.route) },
-        icon = R.drawable.scanicons,
-        contentDescription = "Scan Food",
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 24.dp)
-            .align(Alignment.BottomCenter)
-            .width(280.dp)
+            onClick = { 
+                if (cameraPermissionState.status.isGranted) {
+                    navigate(Route.CameraScanning.route)
+                } else {
+                    cameraPermissionState.launchPermissionRequest()
+                }
+            },
+            icon = R.drawable.scanicons,
+            contentDescription = "Scan Food",
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 24.dp)
+                .align(Alignment.BottomCenter)
+                .width(280.dp)
         )
     }
 }
 
+// Keeping this function for future use but not calling it from HomeScreen
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun MainContent(
+    hasPermission: Boolean,
+    onRequestPermission: () -> Unit
+) {
+    if (hasPermission) {
+        CameraScreen()
+    } else {
+//        NoPermissionScreen(onRequestPermission)
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Preview
+@Composable
+private fun Preview_MainContent() {
+    MainContent(
+        hasPermission = true,
+        onRequestPermission = {}
+    )
+}
