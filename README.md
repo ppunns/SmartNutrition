@@ -1,7 +1,7 @@
-# 🥗 SmartNutrition
+# SmartNutrition
 
 <p align="center">
-  <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="150" alt="SmartNutrition Logo"/>
+  <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="150" alt="SmartNutrition Logo"/>
 </p>
 
 <p align="center">
@@ -24,7 +24,6 @@ SmartNutrition is a modern Android application designed to help users track thei
 - **Food Scanning**: Use your camera to identify and log food items
 - **Food History**: View your consumption history with detailed nutritional information
 - **Personalized Goals**: Set and track your nutrition targets based on your needs
-- **Onboarding Experience**: Smooth introduction to the app's features
 
 ## 🛠️ Tech Stack
 
@@ -57,7 +56,3 @@ SmartNutrition is a modern Android application designed to help users track thei
 - **Camera X**: Modern camera API implementation
 - **Edge-to-Edge Design**: Immersive UI experience
 - **Dynamic Theming**: Adaptive color schemes
-
-## 🏗️ Architecture
-
-SmartNutrition follows Clean Architecture principles with MVVM pattern:
