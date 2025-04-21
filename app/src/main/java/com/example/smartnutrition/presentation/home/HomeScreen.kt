@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartnutrition.R
 import com.example.smartnutrition.presentation.camera.CameraScreen
+import com.example.smartnutrition.presentation.common.FruitsCardList
 import com.example.smartnutrition.presentation.common.PrimaryFloatingActionButton
 import com.example.smartnutrition.presentation.navgraph.Route
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -37,65 +38,68 @@ import com.google.accompanist.permissions.rememberPermissionState
 @Composable
 fun HomeScreen(
     articles: LazyPagingItems<Article>,
-    navigate:(String) -> Unit
+    navigate: (String) -> Unit
 ) {
-    val cameraPermissionState: PermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
-
-    // Removed MainContent call here to avoid showing CameraScreen in HomeScreen
+    val cameraPermissionState: PermissionState =
+        rememberPermissionState(android.Manifest.permission.CAMERA)
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-//            SmartNutritionTopBar()
+            item {
+                CalorieProgressIndicator(
+                    currentCalories = 3082,
+                    targetCalories = 4000
+                )
+            }
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                item {
-                    CalorieProgressIndicator(
-                        currentCalories = 3082,
-                        targetCalories = 4000
-                    )
-                }
-                item {
-                    NutritionIndicatorCard()
-                }
-                item {
-                    Text(
-                        text = "Riwayat Makanan",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
+            item {
+                NutritionIndicatorCard()
+            }
+
+            item {
+                Text(
+                    text = "Riwayat Makanan",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+
+            when {
+                articles.loadState.refresh is LoadState.Loading -> {
+                    // Kurangi jumlah shimmer effect dari 10 menjadi 5
+                    items(5) {
+                        FruitsCardShimmerEffect(
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    }
                 }
 
-                when {
-                    articles.loadState.refresh is LoadState.Loading -> {
-                        items(10) {
-                            FruitsCardShimmerEffect(
-                                modifier = Modifier.padding(horizontal = 8.dp)
+                articles.loadState.refresh is LoadState.Error -> {
+                    item {
+                        EmptyScreen(error = (articles.loadState.refresh as LoadState.Error))
+                    }
+                }
+
+                else -> {
+                    // Gunakan key untuk recycling yang lebih efisien
+                    items(
+                        count = articles.itemCount,
+                        key = { index -> articles[index]?.url ?: index }
+                    ) { index ->
+                        articles[index]?.let { article ->
+                            FruitsCard(
+                                article = article,
+                                onClick = { navigate(article.url) },
+                                // Tambahkan modifier untuk mengurangi ukuran item
+                                modifier = Modifier.fillMaxWidth()
                             )
-                        }
-                    }
-                    articles.loadState.refresh is LoadState.Error -> {
-                        item {
-                            EmptyScreen(error = (articles.loadState.refresh as LoadState.Error))
-                        }
-                    }
-                    else -> {
-                        items(articles.itemCount) { index ->
-                            articles[index]?.let { article ->
-                                FruitsCard(
-                                    article = article,
-                                    onClick = { navigate(article.url) }
-                                )
-                            }
                         }
                     }
                 }
@@ -119,6 +123,7 @@ fun HomeScreen(
         )
     }
 }
+
 
 
 @Composable

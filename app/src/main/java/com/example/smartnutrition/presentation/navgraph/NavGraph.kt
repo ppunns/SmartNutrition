@@ -1,6 +1,9 @@
 package com.example.smartnutrition.presentation.navgraph
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -31,7 +34,8 @@ fun NavGraph(
             }
         }
 
-        composable(route = Route.HomeScreen.route) {
+        composable(route = Route.HomeScreen.route
+        ) {
             val viewModel: HomeViewModel = hiltViewModel()
             HomeScreen (
                 articles = viewModel.news.collectAsLazyPagingItems(),
@@ -41,7 +45,8 @@ fun NavGraph(
             )
         }
 
-        composable(route = Route.CameraScanning.route) {
+        composable(route = Route.CameraScanning.route
+        ) {
             CameraScreen(
                 navigate = {destination ->
                     navController.navigate(destination)
