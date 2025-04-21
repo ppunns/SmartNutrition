@@ -73,7 +73,7 @@ fun HomeScreen(
 
             when {
                 articles.loadState.refresh is LoadState.Loading -> {
-                    // Kurangi jumlah shimmer effect dari 10 menjadi 5
+                    // Kurangi jumlah shimmer effect dari 5 menjadi 3
                     items(5) {
                         FruitsCardShimmerEffect(
                             modifier = Modifier.padding(horizontal = 8.dp)
@@ -88,16 +88,15 @@ fun HomeScreen(
                 }
 
                 else -> {
-                    // Gunakan key untuk recycling yang lebih efisien
+                    // Gunakan key untuk recycling yang lebih efisien dan batasi jumlah item
                     items(
-                        count = articles.itemCount,
+                        count = minOf(articles.itemCount, 20), // Batasi jumlah item yang ditampilkan
                         key = { index -> articles[index]?.url ?: index }
                     ) { index ->
                         articles[index]?.let { article ->
                             FruitsCard(
                                 article = article,
                                 onClick = { navigate(article.url) },
-                                // Tambahkan modifier untuk mengurangi ukuran item
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }

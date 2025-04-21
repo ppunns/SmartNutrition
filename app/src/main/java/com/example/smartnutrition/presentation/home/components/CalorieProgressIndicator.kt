@@ -46,7 +46,7 @@ fun CalorieProgressIndicator(
         animatedProgress.animateTo(
             targetValue = progress,
             animationSpec = tween(
-                durationMillis = 1500,
+                durationMillis = 800, // Kurangi durasi animasi dari 1500ms menjadi 800ms
                 easing = FastOutSlowInEasing
             )
         )

@@ -55,11 +55,17 @@ fun FruitsCard(
                     .size(49.dp)  // Adjusted size to fit smaller card
                     .clip(CircleShape)
             ) {
+                // Tambahkan konfigurasi untuk Coil
                 AsyncImage(
                     model = article.urlToImage,
-                    contentDescription = article.title,
-                    modifier = Modifier.fillMaxSize(),  // Fill the box
-                    contentScale = ContentScale.Crop
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape),
+                    // Tambahkan konfigurasi caching
+                    onLoading = { /* Tampilkan placeholder jika diperlukan */ },
+                    onError = { /* Tampilkan error image jika diperlukan */ }
                 )
             }
 
