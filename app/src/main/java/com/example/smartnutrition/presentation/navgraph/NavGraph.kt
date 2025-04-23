@@ -14,6 +14,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.smartnutrition.presentation.camera.CameraScreen
 import com.example.smartnutrition.presentation.home.HomeScreen
 import com.example.smartnutrition.presentation.home.HomeViewModel
+import com.example.smartnutrition.presentation.login.LoginScreen
 import com.example.smartnutrition.presentation.onboarding.OnBoardingScreen
 import com.example.smartnutrition.presentation.onboarding.OnBoardingViewModel
 
@@ -32,6 +33,12 @@ fun NavGraph(
                 val viewModel: OnBoardingViewModel = hiltViewModel()
                 OnBoardingScreen(onEvent = viewModel::onEvent)
             }
+        }
+
+        composable(route = Route.LoginScreen.route) {
+            LoginScreen(
+                navController = navController
+            )
         }
 
         composable(route = Route.HomeScreen.route

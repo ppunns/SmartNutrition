@@ -62,4 +62,5 @@ object AppModule {
             getNews = GetNews(newsRepository)
         )
     }
+
 }

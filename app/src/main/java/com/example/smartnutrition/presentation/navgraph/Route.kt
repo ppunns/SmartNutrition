@@ -7,6 +7,8 @@ sealed class Route(
     val arguments: List<NamedNavArgument> = emptyList()
 ) {
     object OnBoardingScreen: Route(route = "onBoardingScreen")
+    object LoginScreen : Route("loginScreen")
+    object RegisterScreen : Route("registerScreen")
     object HomeScreen: Route(route = "homeScreen")
     object CameraScanning : Route("camera_scanning")
 

@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val appEntryUseCases: AppEntryUseCases
@@ -26,7 +25,7 @@ class MainViewModel @Inject constructor(
     init {
         appEntryUseCases.readAppEntry().onEach { shouldStartFromHomeScreen ->
             if(shouldStartFromHomeScreen){
-                _startDestination.value = Route.HomeScreen.route  // Changed from NewsNavigation to HomeScreen
+                _startDestination.value = Route.LoginScreen.route // Diubah ke LoginScreen
             }else{
                 _startDestination.value = Route.AppStartNavigation.route
             }
