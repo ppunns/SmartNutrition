@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
+import com.example.smartnutrition.ui.theme.Typography
 
 @Composable
 fun PrimaryButton(
@@ -33,7 +34,7 @@ fun PrimaryButton(
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+            style = Typography.labelLarge,
         )
     }
 }

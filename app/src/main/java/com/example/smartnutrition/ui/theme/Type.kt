@@ -11,9 +11,10 @@ import com.example.smartnutrition.R
 
 val Poppins = FontFamily(
     fonts = listOf(
-        Font(R.font.poppins_regular, FontWeight.Normal),
-        Font(R.font.poppins_bold, FontWeight.Bold),
-        Font(R.font.poppins_semibold, FontWeight.SemiBold),
+        Font(R.font.inter_regular, FontWeight.Normal),
+        Font(R.font.inter_bold, FontWeight.Bold),
+        Font(R.font.inter_semibold, FontWeight.SemiBold),
+        Font(R.font.inter_extrabold, FontWeight.ExtraBold)
     )
 )
 
@@ -52,4 +53,97 @@ val Typography = Typography(
         lineHeight = 19.sp,
     ),
 
+)
+
+
+// Gaya tipografi tambahan yang dioptimalkan untuk mobile
+val MobileTypography = Typography(
+    // H1 - Extra bold / 24
+    headlineLarge = TextStyle(
+        fontSize = 26.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.ExtraBold,
+        lineHeight = 32.sp,
+        letterSpacing = (-0.5).sp
+    ),
+    // H2 - Extra bold / 18
+    headlineMedium = TextStyle(
+        fontSize = 20.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.ExtraBold,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
+    ),
+    // H3 - Extra bold / 16
+    headlineSmall = TextStyle(
+        fontSize = 18.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.ExtraBold,
+        lineHeight = 24.sp,
+        letterSpacing = 0.sp
+    ),
+    // H4 - Bold / 14
+    titleLarge = TextStyle(
+        fontSize = 16.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Bold,
+        lineHeight = 20.sp,
+        letterSpacing = 0.sp
+    ),
+    // H5 - Bold / 12
+    titleMedium = TextStyle(
+        fontSize = 14.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Bold,
+        lineHeight = 18.sp,
+        letterSpacing = 0.15.sp
+    ),
+    // Body XL - Regular / 18
+    bodyLarge = TextStyle(
+        fontSize = 20.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 27.sp,
+        letterSpacing = 0.15.sp
+    ),
+    // Body L - Regular / 16
+    bodyMedium = TextStyle(
+        fontSize = 18.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 24.sp,
+        letterSpacing = 0.25.sp
+    ),
+    // Body M - Regular / 14
+    bodySmall = TextStyle(
+        fontSize = 16.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 21.sp,
+        letterSpacing = 0.4.sp
+    ),
+    // Body S - Regular / 12
+    labelLarge = TextStyle(
+        fontSize = 14.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 18.sp,
+        letterSpacing = 0.1.sp
+    ),
+    // Action L - Semi Bold / 14
+    labelMedium = TextStyle(
+        fontSize = 16.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.SemiBold,
+        lineHeight = 20.sp,
+        letterSpacing = 0.5.sp
+    ),
+    // Action M - Semi Bold / 12
+    labelSmall = TextStyle(
+        fontSize = 14.sp,
+        fontFamily = Poppins,
+        fontWeight = FontWeight.SemiBold,
+        lineHeight = 18.sp,
+        letterSpacing = 0.5.sp
+    )
 )

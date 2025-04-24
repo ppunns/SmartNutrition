@@ -29,14 +29,14 @@ val Natural900 = Color(0xFF1C1917)
 val Natural1000 = Color(0xFF0C0A09)
 
 
-val Blue50 = Color(0xFFF4F9FF)
-val Blue100 = Color(0xFFDBEAFE) 
-val Blue200 = Color(0xFFBFDBFE)
-val Blue300 = Color(0xFF93C5FD)
-val Blue400 = Color(0xFF60A5FA)
-val Blue500 = Color(0xFF3B82F6)
-val Blue600 = Color(0xFF2563EB)
-val Blue700 = Color(0xFF1D4ED8)
-val Blue800 = Color(0xFF1E40AF)
-val Blue900 = Color(0xFF1E3A8A)
-val Blue1000 = Color(0xFF172554)
+val Blue50 = Color(0xFFE6F0FF)  // Sangat terang
+val Blue100 = Color(0xFFCCE0FF) // Lebih terang
+val Blue200 = Color(0xFFB3D1FF)
+val Blue300 = Color(0xFF99C2FF)
+val Blue400 = Color(0xFF4D94FF)
+val Blue500 = Color(0xFF006EFF) // Warna dasar yang diminta
+val Blue600 = Color(0xFF0062E6) // Sedikit lebih gelap
+val Blue700 = Color(0xFF0056CC)
+val Blue800 = Color(0xFF004AB3)
+val Blue900 = Color(0xFF003E99)
+val Blue1000 = Color(0xFF003280) // Paling gelap

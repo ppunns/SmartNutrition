@@ -1,6 +1,7 @@
 package com.example.smartnutrition.data.repository
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.example.smartnutrition.data.model.LoginRequest
 import com.example.smartnutrition.data.remote.AuthApi
 import com.example.smartnutrition.data.remote.dto.LoginResponse
@@ -16,8 +17,11 @@ class AuthRepositoryImpl @Inject constructor(
         val response = api.login(LoginRequest(email, password))
         // Simpan token
         prefs.edit()
-            .putString("auth_token", response.token)
+            .putString("auth_token", response.data.token)
             .apply()
+
+        // Log respons login yang sukses
+        Log.d("Login Response", response.message)
         Result.success(response)
     } catch(e: Exception) {
         Result.failure(e)
