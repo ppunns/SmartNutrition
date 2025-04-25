@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartnutrition.ui.icons.AppIcons
+import com.example.smartnutrition.ui.theme.MobileTypography
 
 @Composable
 fun EmailInput(
@@ -47,7 +48,7 @@ fun EmailInput(
         placeholder = { 
             Text(
                 text = "Email",
-                style = MaterialTheme.typography.bodySmall
+                style = MobileTypography.bodySmall // Ubah dari bodySmall ke bodyMedium
             ) 
         },
         modifier = modifier
@@ -70,7 +71,7 @@ fun EmailInput(
                 ) 
             }
         } else null,
-        textStyle = MaterialTheme.typography.labelSmall
+        textStyle = MobileTypography.bodySmall  // Ubah dari labelSmall ke bodyMedium
     )
 }
 
@@ -93,7 +94,7 @@ fun PasswordInput(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(text = "Password",style = MaterialTheme.typography.bodySmall) },
+        placeholder = { Text(text = "Password",style = MobileTypography.bodySmall) },
         modifier = modifier.fillMaxWidth()
             .defaultMinSize(minHeight = 56.dp),
         shape = RoundedCornerShape(12.dp),
@@ -112,6 +113,7 @@ fun PasswordInput(
         supportingText = if (isError || !isPasswordValid) {
             { Text(text = passwordError, style = MaterialTheme.typography.labelSmall) }
         } else null,
+        textStyle = MobileTypography.bodySmall,
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
@@ -130,6 +132,40 @@ fun PasswordInput(
     )
 }
 
+@Composable
+fun UsernameInput(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    isError: Boolean = false,
+    errorMessage: String = ""
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = { 
+            Text(
+                text = "Username",
+                style = MobileTypography.bodySmall
+            ) 
+        },
+        modifier = modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 56.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedBorderColor = Color.LightGray,
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White
+        ),
+        isError = isError,
+        supportingText = if (isError) {
+            { Text(text = errorMessage, style = MaterialTheme.typography.labelSmall) }
+        } else null,
+        textStyle = MobileTypography.bodySmall
+    )
+}
 
 @Preview(showBackground = true)
 @Composable

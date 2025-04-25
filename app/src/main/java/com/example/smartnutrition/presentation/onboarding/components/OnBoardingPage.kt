@@ -23,6 +23,7 @@ import com.example.smartnutrition.R
 import com.example.smartnutrition.presentation.Dimens.MediumPadding1
 import com.example.smartnutrition.presentation.Dimens.MediumPadding2
 import com.example.smartnutrition.presentation.onboarding.Page
+import com.example.smartnutrition.ui.theme.MobileTypography
 import com.example.smartnutrition.ui.theme.SmartNutritionTheme
 
 @Composable
@@ -48,7 +49,7 @@ fun OnBoardingPage(
                 .fillMaxWidth()
                 .padding(horizontal = MediumPadding2),
             text = page.title,
-            style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
+            style = MobileTypography.headlineLarge,
             color = colorResource(id = R.color.display_small),
             textAlign = TextAlign.Center
         )
@@ -58,7 +59,7 @@ fun OnBoardingPage(
                 .fillMaxWidth()
                 .padding(horizontal = MediumPadding2),
             text = page.description,
-            style = MaterialTheme.typography.bodySmall,
+            style = MobileTypography.labelLarge,
             color = colorResource(id = R.color.text_medium),
             textAlign = TextAlign.Center
         )

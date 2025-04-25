@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -17,6 +18,7 @@ import com.example.smartnutrition.presentation.home.HomeViewModel
 import com.example.smartnutrition.presentation.login.LoginScreen
 import com.example.smartnutrition.presentation.onboarding.OnBoardingScreen
 import com.example.smartnutrition.presentation.onboarding.OnBoardingViewModel
+import com.example.smartnutrition.presentation.register.RegisterScreen
 
 @Composable
 fun NavGraph(
@@ -29,14 +31,22 @@ fun NavGraph(
             route = Route.AppStartNavigation.route,
             startDestination = Route.OnBoardingScreen.route
         ) {
-            composable(route = Route.OnBoardingScreen.route) {
+            composable(route = Route.OnBoardingScreen.route,) {
                 val viewModel: OnBoardingViewModel = hiltViewModel()
                 OnBoardingScreen(onEvent = viewModel::onEvent)
             }
         }
 
-        composable(route = Route.LoginScreen.route) {
+        composable(
+            route = Route.LoginScreen.route
+        ) {
             LoginScreen(
+                navController = navController
+            )
+        }
+
+        composable(route = Route.RegisterScreen.route) {
+            RegisterScreen(
                 navController = navController
             )
         }

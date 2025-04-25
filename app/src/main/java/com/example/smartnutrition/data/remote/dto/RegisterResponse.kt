@@ -1,4 +1,7 @@
 package com.example.smartnutrition.data.remote.dto
 
-class RegisterResponse {
-}
+data class RegisterResponse(
+    val `data`: Data,
+    val message: String,
+    val status: String
+)

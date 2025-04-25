@@ -1,6 +1,7 @@
 package com.example.smartnutrition.presentation.home
 
 import FruitsCardShimmerEffect
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,18 +24,29 @@ import com.example.smartnutrition.presentation.home.components.FruitsCard
 import com.example.smartnutrition.presentation.home.components.NutritionIndicatorCard
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartnutrition.R
 import com.example.smartnutrition.presentation.camera.CameraScreen
 import com.example.smartnutrition.presentation.common.FruitsCardList
 import com.example.smartnutrition.presentation.common.PrimaryFloatingActionButton
+import com.example.smartnutrition.presentation.common.SmartNutritionTopBar
+import com.example.smartnutrition.presentation.home.components.SegmentedControl
 import com.example.smartnutrition.presentation.navgraph.Route
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     articles: LazyPagingItems<Article>,
@@ -42,67 +54,141 @@ fun HomeScreen(
 ) {
     val cameraPermissionState: PermissionState =
         rememberPermissionState(android.Manifest.permission.CAMERA)
-
+    
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
+        var selectedTab by remember { mutableStateOf(0) }
+        val pagerState = rememberPagerState(pageCount = { 2 })
+
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(horizontal = 16.dp)
+                .padding(top = 75.dp)
         ) {
-            item {
-                CalorieProgressIndicator(
-                    currentCalories = 3082,
-                    targetCalories = 4000
-                )
-            }
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+                pageSpacing = 16.dp
+            ) { page ->
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    when (page) {
+                        0 -> {
+                            item {
+                                CalorieProgressIndicator(
+                                    currentCalories = 3082,
+                                    targetCalories = 4000
+                                )
+                            }
+                            item {
+                                NutritionIndicatorCard()
+                            }
+                            item {
+                                Text(
+                                    text = "Riwayat Makanan",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.padding(vertical = 8.dp)
+                                )
+                            }
+                            // Artikel / konten harian
+                            when {
+                                articles.loadState.refresh is LoadState.Loading -> {
+                                    items(3) {
+                                        FruitsCardShimmerEffect(
+                                            modifier = Modifier.padding(horizontal = 8.dp)
+                                        )
+                                    }
+                                }
 
-            item {
-                NutritionIndicatorCard()
-            }
+                                articles.loadState.refresh is LoadState.Error -> {
+                                    item {
+                                        EmptyScreen(error = (articles.loadState.refresh as LoadState.Error))
+                                    }
+                                }
 
-            item {
-                Text(
-                    text = "Riwayat Makanan",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-            }
+                                else -> {
+                                    items(
+                                        count = minOf(articles.itemCount, 20),
+                                        key = { index -> articles[index]?.url ?: index }
+                                    ) { index ->
+                                        articles[index]?.let { article ->
+                                            FruitsCard(
+                                                article = article,
+                                                onClick = { navigate(article.url) },
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        1 -> {
+                            item {
+                                CalorieProgressIndicator(
+                                    currentCalories = 3082,
+                                    targetCalories = 4000
+                                )
+                            }
+                            item {
+                                NutritionIndicatorCard()
+                            }
+                            item {
+                                Text(
+                                    text = "Riwayat Makanan",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.padding(vertical = 8.dp)
+                                )
+                            }
+                            // Artikel / konten harian
+                            when {
+                                articles.loadState.refresh is LoadState.Loading -> {
+                                    items(3) {
+                                        FruitsCardShimmerEffect(
+                                            modifier = Modifier.padding(horizontal = 8.dp)
+                                        )
+                                    }
+                                }
 
-            when {
-                articles.loadState.refresh is LoadState.Loading -> {
-                    // Kurangi jumlah shimmer effect dari 5 menjadi 3
-                    items(5) {
-                        FruitsCardShimmerEffect(
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                    }
-                }
+                                articles.loadState.refresh is LoadState.Error -> {
+                                    item {
+                                        EmptyScreen(error = (articles.loadState.refresh as LoadState.Error))
+                                    }
+                                }
 
-                articles.loadState.refresh is LoadState.Error -> {
-                    item {
-                        EmptyScreen(error = (articles.loadState.refresh as LoadState.Error))
-                    }
-                }
-
-                else -> {
-                    // Gunakan key untuk recycling yang lebih efisien dan batasi jumlah item
-                    items(
-                        count = minOf(articles.itemCount, 20), // Batasi jumlah item yang ditampilkan
-                        key = { index -> articles[index]?.url ?: index }
-                    ) { index ->
-                        articles[index]?.let { article ->
-                            FruitsCard(
-                                article = article,
-                                onClick = { navigate(article.url) },
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                                else -> {
+                                    items(
+                                        count = minOf(articles.itemCount, 20),
+                                        key = { index -> articles[index]?.url ?: index }
+                                    ) { index ->
+                                        articles[index]?.let { article ->
+                                            FruitsCard(
+                                                article = article,
+                                                onClick = { navigate(article.url) },
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
+        }
+
+        // Floating SegmentedControl
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(horizontal = 16.dp, vertical = 30.dp)
+        ) {
+            SegmentedControl(
+                selectedIndex = pagerState.currentPage,
+                onItemSelected = { selectedTab = it }
+            )
         }
 
         PrimaryFloatingActionButton(

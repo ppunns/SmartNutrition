@@ -1,5 +1,9 @@
 package com.example.smartnutrition.presentation.login
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,6 +27,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.font.FontWeight
 import com.example.smartnutrition.presentation.common.BlueCircleElement
 import com.example.smartnutrition.presentation.common.EmailInput
 import com.example.smartnutrition.presentation.common.PasswordInput
@@ -31,6 +36,7 @@ import com.example.smartnutrition.ui.theme.Blue100
 import com.example.smartnutrition.ui.theme.Blue200
 import com.example.smartnutrition.ui.theme.Blue50
 import com.example.smartnutrition.ui.theme.MobileTypography
+import kotlinx.coroutines.delay
 
 @Composable
 fun LoginScreen(
@@ -41,6 +47,27 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     val state by viewModel.state.collectAsState()
 
+    // State untuk animasi
+    var isHeaderVisible by remember { mutableStateOf(false) }
+    var isEmailVisible by remember { mutableStateOf(false) }
+    var isPasswordVisible by remember { mutableStateOf(false) }
+    var isButtonVisible by remember { mutableStateOf(false) }
+    var isFooterVisible by remember { mutableStateOf(false) }
+
+    // Mengatur timing animasi
+    LaunchedEffect(Unit) {
+        delay(100) // Delay awal
+        isHeaderVisible = true
+        delay(200) // Delay antar komponen
+        isEmailVisible = true
+        delay(200)
+        isPasswordVisible = true
+        delay(200)
+        isButtonVisible = true
+        delay(200)
+        isFooterVisible = true
+    }
+
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
             navController.navigate(Route.HomeScreen.route) {
@@ -48,7 +75,6 @@ fun LoginScreen(
             }
         }
     }
-
     Box(modifier = Modifier.fillMaxSize()) {
         // Background element
         BlueCircleElement(
@@ -56,7 +82,6 @@ fun LoginScreen(
                 .size(700.dp)
                 .offset(x = (140).dp, y = (-300).dp)
         )
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -65,88 +90,164 @@ fun LoginScreen(
         ) {
             Spacer(modifier = Modifier.height(139.dp))
             
-            Text(
-                text = "Login Disini",
-                style = MobileTypography.headlineLarge,  // Tetap menggunakan headlineLarge
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = "Selamat Datang Kembali!",
-                style = MobileTypography.bodySmall,  // Tetap menggunakan bodyLarge
-                color = Color.Gray
-            )
+            AnimatedVisibility(
+                visible = isHeaderVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { 50 },
+                    animationSpec = tween(durationMillis = 300)
+                ) + fadeIn(animationSpec = tween(durationMillis = 300))
+            ) {
+                Column {
+                    Text(
+                        text = "Login Disini",
+                        style = MobileTypography.headlineLarge,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "Selamat Datang Kembali!",
+                        style = MobileTypography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Text(
-                text = "Email",
-                style = MobileTypography.titleMedium,  // Ubah ke titleMedium
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            EmailInput(
-                value = email,
-                onValueChange = { email = it },
-                isError = state.error != null,
-                errorMessage = state.error ?: ""
-            )
+            AnimatedVisibility(
+                visible = isEmailVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { 50 },
+                    animationSpec = tween(durationMillis = 300)
+                ) + fadeIn(animationSpec = tween(durationMillis = 300))
+            ) {
+                Column {
+                    Text(
+                        text = "Email",
+                        style = MobileTypography.titleMedium,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    EmailInput(
+                        value = email,
+                        onValueChange = { email = it },
+                        isError = state.error != null
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = "Password",
-                style = MobileTypography.titleMedium,  // Ubah ke titleMedium
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            PasswordInput(
-                value = password,
-                onValueChange = { password = it },
-                isError = state.error != null,
-                errorMessage = state.error ?: ""
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Lupa password?",
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(top = 8.dp)
-                    .clickable { /* Handle forgot password */ },
-                style = MobileTypography.labelSmall,  // Ubah ke bodySmall
-                color = MaterialTheme.colorScheme.primary
-            )
+            AnimatedVisibility(
+                visible = isPasswordVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { 50 },
+                    animationSpec = tween(durationMillis = 300)
+                ) + fadeIn(animationSpec = tween(durationMillis = 300))
+            ) {
+                Column {
+                    Text(
+                        text = "Password",
+                        style = MobileTypography.titleMedium,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    PasswordInput(
+                        value = password,
+                        onValueChange = { password = it },
+                        isError = state.error != null
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Lupa password?",
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(top = 8.dp)
+                            .clickable { /* Handle forgot password */ },
+                        style = MobileTypography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            if (state.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-            } else {
-                PrimaryButton(
-                    onClick = { viewModel.login(email, password) },
-                    text = "Login",
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 24.dp),
-                horizontalArrangement = Arrangement.Center
+            AnimatedVisibility(
+                visible = isButtonVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { 50 },
+                    animationSpec = tween(durationMillis = 300)
+                ) + fadeIn(animationSpec = tween(durationMillis = 300))
             ) {
-                Text(
-                    text = "Belum punya akun? ",
-                    style = MobileTypography.labelLarge,  // Ubah ke bodySmall
-                    color = Color.Gray
-                )
-                Text(
-                    text = "Daftar di sini!",
-                    style = MobileTypography.labelSmall,  // Ubah ke bodySmall
-                    color = MaterialTheme.colorScheme.primary
-                )
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                } else {
+                    PrimaryButton(
+                        onClick = { viewModel.login(email, password) },
+                        text = "Login"
+                    )
+                }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            AnimatedVisibility(
+                visible = isFooterVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { 50 },
+                    animationSpec = tween(durationMillis = 300)
+                ) + fadeIn(animationSpec = tween(durationMillis = 300))
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Belum punya akun? ",
+                        style = MobileTypography.labelLarge,
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = "Daftar di sini!",
+                        modifier = Modifier.clickable {
+                            navController.navigate(Route.RegisterScreen.route)
+                        },
+                        style = MobileTypography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun SimpleCard() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = "Title",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = "Description text goes here. This is a simple Jetpack Compose card component.",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
     }
 }
@@ -159,16 +260,4 @@ fun LoginScreenPreview() {
         navController = rememberNavController()
     )
 }
-@Preview(showBackground = true)
-@Composable
-fun BlueCircleElementPreview() {
-    Box(
-        modifier = Modifier
-            .background(Color.White)
-            .fillMaxSize()
-    ) {
-        BlueCircleElement(
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
+
