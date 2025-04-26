@@ -23,11 +23,14 @@ import com.example.smartnutrition.presentation.navgraph.Route
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Typography
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.smartnutrition.presentation.common.BlueCircleElement
 import com.example.smartnutrition.presentation.common.EmailInput
 import com.example.smartnutrition.presentation.common.PasswordInput
@@ -37,6 +40,7 @@ import com.example.smartnutrition.ui.theme.Blue200
 import com.example.smartnutrition.ui.theme.Blue50
 import com.example.smartnutrition.ui.theme.MobileTypography
 import kotlinx.coroutines.delay
+
 
 @Composable
 fun LoginScreen(
@@ -177,16 +181,10 @@ fun LoginScreen(
                     animationSpec = tween(durationMillis = 300)
                 ) + fadeIn(animationSpec = tween(durationMillis = 300))
             ) {
-                if (state.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                } else {
-                    PrimaryButton(
-                        onClick = { viewModel.login(email, password) },
-                        text = "Login"
-                    )
-                }
+                PrimaryButton(
+                    onClick = { viewModel.login(email, password) },
+                    text = "Login"
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -217,6 +215,35 @@ fun LoginScreen(
                         style = MobileTypography.labelSmall,
                         color = MaterialTheme.colorScheme.primary
                     )
+                }
+            }
+        }
+
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Card(
+                    modifier = Modifier
+                        .size(100.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White.copy(alpha = 0.9f)
+                    )
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            strokeWidth = 4.dp
+                        )
+                    }
                 }
             }
         }

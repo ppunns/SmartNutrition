@@ -8,6 +8,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,11 +24,8 @@ import com.example.smartnutrition.presentation.common.EmailInput
 import com.example.smartnutrition.presentation.common.PasswordInput
 import com.example.smartnutrition.presentation.common.PrimaryButton
 import com.example.smartnutrition.presentation.common.UsernameInput
-import com.example.smartnutrition.presentation.login.LoginScreen
-import com.example.smartnutrition.presentation.login.SimpleCard
 import com.example.smartnutrition.presentation.navgraph.Route
 import com.example.smartnutrition.presentation.register.component.TermsAndConditionsCheckbox
-import com.example.smartnutrition.ui.theme.Blue
 import com.example.smartnutrition.ui.theme.MobileTypography
 import kotlinx.coroutines.delay
 
@@ -124,9 +122,7 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     UsernameInput(
                         value = state.username,
-                        onValueChange = viewModel::onUsernameChange,
-                        isError = state.error != null,
-                        errorMessage = state.error ?: ""
+                        onValueChange = viewModel::onUsernameChange
                     )
                 }
             }
@@ -151,9 +147,7 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     EmailInput(
                         value = state.email,
-                        onValueChange = viewModel::onEmailChange,
-                        isError = state.error != null,
-                        errorMessage = state.error ?: ""
+                        onValueChange = viewModel::onEmailChange
                     )
                 }
             }
@@ -174,9 +168,7 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     PasswordInput(
                         value = state.password,
-                        onValueChange = viewModel::onPasswordChange,
-                        isError = state.error != null,
-                        errorMessage = state.error ?: ""
+                        onValueChange = viewModel::onPasswordChange
                     )
                 }
             }
@@ -197,9 +189,7 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     PasswordInput(
                         value = state.confirmPassword,
-                        onValueChange = viewModel::onConfirmPasswordChange,
-                        isError = state.error != null,
-                        errorMessage = state.error ?: ""
+                        onValueChange = viewModel::onConfirmPasswordChange
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     TermsAndConditionsCheckbox(
@@ -219,19 +209,11 @@ fun RegisterScreen(
                     animationSpec = tween(durationMillis = 300)
                 ) + fadeIn(animationSpec = tween(durationMillis = 300))
             ){
-                if (state.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                } else {
-                    PrimaryButton(
-                        onClick = { viewModel.register() },
-                        text = "Daftar",
-                    )
-                }
+                PrimaryButton(
+                    onClick = { viewModel.register() },
+                    text = "Daftar",)
+
             }
-
-
             Spacer(modifier = Modifier.height(16.dp))
             // Footer seharusnya dibungkus dengan AnimatedVisibility
             AnimatedVisibility(
@@ -262,6 +244,34 @@ fun RegisterScreen(
                         style = MobileTypography.labelSmall,
                         color = MaterialTheme.colorScheme.primary
                     )
+                }
+            }
+        }
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Card(
+                    modifier = Modifier
+                        .size(100.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White.copy(alpha = 0.9f)
+                    )
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            strokeWidth = 4.dp
+                        )
+                    }
                 }
             }
         }

@@ -69,6 +69,15 @@ fun HomeScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         var selectedTab by remember { mutableStateOf(0) }
         val pagerState = rememberPagerState(pageCount = { 2 })
+        
+        // Menambahkan LaunchedEffect untuk sinkronisasi state
+        LaunchedEffect(selectedTab) {
+            pagerState.animateScrollToPage(selectedTab)
+        }
+        
+        LaunchedEffect(pagerState.currentPage) {
+            selectedTab = pagerState.currentPage
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize() // Tambahkan padding top untuk memberikan ruang bagi SegmentedControl
@@ -100,8 +109,7 @@ fun HomeScreen(
                                 Text(
                                     text = "Riwayat Makanan",
                                     style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(vertical = 8.dp)
+                                    fontWeight = FontWeight.SemiBold
                                 )
                             }
                             // Artikel / konten harian
@@ -153,8 +161,7 @@ fun HomeScreen(
                                 Text(
                                     text = "Riwayat Makanan",
                                     style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(vertical = 8.dp)
+                                    fontWeight = FontWeight.SemiBold
                                 )
                             }
                             // Artikel / konten harian
@@ -199,7 +206,8 @@ fun HomeScreen(
         ){
             SmartNutritionTopBar()
         }
-        SmartNutritionTopBar()
+        // Menghapus SmartNutritionTopBar yang duplikat
+        
         // Floating SegmentedControl
         Box(
             modifier = Modifier
@@ -208,8 +216,10 @@ fun HomeScreen(
                 .padding(top = 110.dp)
         ) {
             SegmentedControl(
-                selectedIndex = pagerState.currentPage,
-                onItemSelected = { selectedTab = it }
+                selectedIndex = selectedTab,  // Menggunakan selectedTab
+                onItemSelected = { newTab -> 
+                    selectedTab = newTab  // Update selectedTab
+                }
             )
         }
 

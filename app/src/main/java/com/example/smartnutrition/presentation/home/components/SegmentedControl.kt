@@ -57,12 +57,6 @@ fun SegmentedControl(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .shadow(
-                elevation = 8.dp,
-                spotColor = Color(0xFF006FFD),
-                ambientColor = Color(0xFF006FFD),
-                shape = RoundedCornerShape(16.dp)
-            )
             .border(
                 width = 0.5.dp,
                 color = Color(0xFF006FFD).copy(alpha = 0.1f),
