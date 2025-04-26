@@ -1,68 +1,106 @@
 package com.example.smartnutrition.presentation.common
 
+
+
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.smartnutrition.ui.theme.SmartNutritionTheme
+import androidx.compose.ui.unit.sp
+import com.example.smartnutrition.R
+import com.example.smartnutrition.ui.theme.MobileTypography
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SmartNutritionTopBar() {
-    TopAppBar(
-        modifier = Modifier.height(57.dp),
-        title = {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .background(Color.White)
+            .border(
+                width = 0.5.dp,
+                color = Color(0xFF006FFD).copy(alpha = 0.1f),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .shadow(
+                elevation = 4.dp,
+                spotColor = Color.Black.copy(alpha = 0.1f),
+                ambientColor = Color.Black.copy(alpha = 0.1f)
+            )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(top = 40.dp)
+                .align(Alignment.Center),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Logo and Brand Name
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),  // Added horizontal padding
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(7.dp)
             ) {
-                Text(
-                    text = "SmartNutrition",
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    fontWeight = FontWeight.Bold
+                // App Logo
+                Image(
+                    painter = painterResource(id = R.drawable.ic_splash), // Replace with your logo resource
+                    contentDescription = "Smart Nutrition Logo",
+                    modifier = Modifier
+                        .size(30.dp)
+                        .clip(CircleShape)
                 )
                 
-                IconButton(onClick = { /* Handle profile click */ }) {
-                    Icon(
-                        imageVector = Icons.Default.AccountCircle,
-                        contentDescription = "Profile",
-                        modifier = Modifier.size(32.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
+                // Brand Name
+                Text(
+                    text = "Smart Nutrition",
+                    style = MobileTypography.headlineMedium,
+                    color = Color(0xFF2E86FB) // Blue color from your image
+                )
             }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.primary
-        )
-    )
-}
-@Preview
-@Composable
-private fun View() {
-    SmartNutritionTheme {
-        SmartNutritionTopBar()
+            
+            // User Profile Icon
+            Box(
+                modifier = Modifier
+                    .size(30.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFFD5E7FB)) // Light blue background
+            ) {
+                // You can replace this with an actual user profile image if available
+                Image(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = "User Profile",
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+        }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SmartNutritionTopBarPreview() {
+    SmartNutritionTopBar()
 }

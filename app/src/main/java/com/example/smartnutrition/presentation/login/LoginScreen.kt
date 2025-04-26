@@ -130,8 +130,7 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     EmailInput(
                         value = email,
-                        onValueChange = { email = it },
-                        isError = state.error != null
+                        onValueChange = { email = it }
                     )
                 }
             }
@@ -154,8 +153,7 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     PasswordInput(
                         value = password,
-                        onValueChange = { password = it },
-                        isError = state.error != null
+                        onValueChange = { password = it }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(

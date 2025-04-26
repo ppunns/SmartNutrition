@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,11 +36,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
+import com.example.smartnutrition.ui.theme.Blue100
+import com.example.smartnutrition.ui.theme.Blue300
 import com.example.smartnutrition.ui.theme.Blue50
+import com.example.smartnutrition.ui.theme.Blue500
 
 
 @Composable
@@ -51,12 +56,25 @@ fun SegmentedControl(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .shadow(
+                elevation = 8.dp,
+                spotColor = Color(0xFF006FFD),
+                ambientColor = Color(0xFF006FFD),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .border(
+                width = 0.5.dp,
+                color = Color(0xFF006FFD).copy(alpha = 0.1f),
+                shape = RoundedCornerShape(16.dp)
+            ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Blue50
         ),
-        elevation = CardDefaults.cardElevation(0.dp)
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        )
     ) {
         Row(
             modifier = Modifier
