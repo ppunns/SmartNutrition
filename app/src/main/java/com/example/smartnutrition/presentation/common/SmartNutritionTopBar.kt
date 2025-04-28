@@ -6,6 +6,7 @@ package com.example.smartnutrition.presentation.common
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -33,7 +34,9 @@ import com.example.smartnutrition.R
 import com.example.smartnutrition.ui.theme.MobileTypography
 
 @Composable
-fun SmartNutritionTopBar() {
+fun SmartNutritionTopBar(
+    onProfileClick: () -> Unit = {} // Tambahkan parameter untuk handle click
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -87,6 +90,7 @@ fun SmartNutritionTopBar() {
                     .size(30.dp)
                     .clip(CircleShape)
                     .background(Color(0xFFD5E7FB)) // Light blue background
+                    .clickable { onProfileClick() } // Tambahkan clickable modifier
             ) {
                 // You can replace this with an actual user profile image if available
                 Image(

@@ -18,6 +18,7 @@ import com.example.smartnutrition.presentation.home.HomeViewModel
 import com.example.smartnutrition.presentation.login.LoginScreen
 import com.example.smartnutrition.presentation.onboarding.OnBoardingScreen
 import com.example.smartnutrition.presentation.onboarding.OnBoardingViewModel
+import com.example.smartnutrition.presentation.profile.ProfileScreen
 import com.example.smartnutrition.presentation.register.RegisterScreen
 
 @Composable
@@ -48,6 +49,16 @@ fun NavGraph(
         composable(route = Route.RegisterScreen.route) {
             RegisterScreen(
                 navController = navController
+            )
+        }
+        composable(route = Route.ProfileScreen.route) {
+            ProfileScreen(
+                onNavigateBack = { navController.navigateUp() },
+                onNavigateToLogin = {
+                    navController.navigate(Route.LoginScreen.route) {
+                        popUpTo(Route.HomeScreen.route) { inclusive = true }
+                    }
+                }
             )
         }
 

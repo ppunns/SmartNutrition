@@ -10,6 +10,7 @@ sealed class Route(
     object LoginScreen : Route("loginScreen")
     object RegisterScreen : Route("register_screen")
     object HomeScreen: Route(route = "homeScreen")
+    object ProfileScreen: Route(route = "profileScreen")
     object CameraScanning : Route("camera_scanning")
 
     object DetailsScreen : Route(route = "detailsScreen")

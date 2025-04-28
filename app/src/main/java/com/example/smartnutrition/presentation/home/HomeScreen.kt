@@ -204,7 +204,11 @@ fun HomeScreen(
             modifier = Modifier
                 .align(Alignment.TopCenter)
         ){
-            SmartNutritionTopBar()
+            SmartNutritionTopBar(
+                onProfileClick = {
+                    navigate(Route.ProfileScreen.route)
+                }
+            )
         }
         // Menghapus SmartNutritionTopBar yang duplikat
         
