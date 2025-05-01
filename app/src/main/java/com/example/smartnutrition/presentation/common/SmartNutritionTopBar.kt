@@ -44,8 +44,7 @@ fun SmartNutritionTopBar(
             .background(Color.White)
             .border(
                 width = 0.5.dp,
-                color = Color(0xFF006FFD).copy(alpha = 0.1f),
-                shape = RoundedCornerShape(16.dp)
+                color = Color(0xFF006FFD).copy(alpha = 0.1f)
             )
             .shadow(
                 elevation = 4.dp,

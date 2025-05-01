@@ -7,7 +7,15 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +30,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smartnutrition.presentation.navgraph.Route
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Typography
@@ -50,6 +60,19 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val state by viewModel.state.collectAsState()
+    
+    // State untuk snackbar
+    val snackbarHostState = remember { SnackbarHostState() }
+    
+    // Effect untuk menampilkan snackbar saat ada error
+    LaunchedEffect(state.error) {
+        if (state.error != null) {
+            snackbarHostState.showSnackbar(
+                message = state.error!!,
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
 
     // State untuk animasi
     var isHeaderVisible by remember { mutableStateOf(false) }
@@ -219,6 +242,7 @@ fun LoginScreen(
             }
         }
 
+        // Loading overlay
         if (state.isLoading) {
             Box(
                 modifier = Modifier
@@ -226,27 +250,19 @@ fun LoginScreen(
                     .background(Color.Black.copy(alpha = 0.5f)),
                 contentAlignment = Alignment.Center
             ) {
-                Card(
-                    modifier = Modifier
-                        .size(100.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White.copy(alpha = 0.9f)
-                    )
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(48.dp),
-                            color = MaterialTheme.colorScheme.primary,
-                            strokeWidth = 4.dp
-                        )
-                    }
-                }
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
+
+        // Snackbar host
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp)
+        )
     }
 }
 

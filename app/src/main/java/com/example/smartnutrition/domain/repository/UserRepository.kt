@@ -2,7 +2,7 @@ package com.example.smartnutrition.domain.repository
 
 
 import android.net.Uri
-import com.example.smartnutrition.domain.model.User
+import com.example.smartnutrition.data.remote.dto.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

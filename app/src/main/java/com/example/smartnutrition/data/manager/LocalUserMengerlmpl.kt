@@ -1,5 +1,6 @@
-package com.example.smartnutrition.data.manager
 
+
+package com.example.smartnutrition.data.manager
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

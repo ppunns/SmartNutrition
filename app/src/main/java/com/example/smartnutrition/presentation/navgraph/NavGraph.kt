@@ -20,14 +20,18 @@ import com.example.smartnutrition.presentation.onboarding.OnBoardingScreen
 import com.example.smartnutrition.presentation.onboarding.OnBoardingViewModel
 import com.example.smartnutrition.presentation.profile.ProfileScreen
 import com.example.smartnutrition.presentation.register.RegisterScreen
+import com.example.smartnutrition.presentation.splash.SplashScreen
 
 @Composable
 fun NavGraph(
-    starDestination: String
+    startDestination: String = Route.SplashScreen.route
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = starDestination) {
+    NavHost(navController = navController, startDestination = startDestination) {
+        composable(route = Route.SplashScreen.route) {
+            SplashScreen(navController = navController)
+        }
         navigation(
             route = Route.AppStartNavigation.route,
             startDestination = Route.OnBoardingScreen.route

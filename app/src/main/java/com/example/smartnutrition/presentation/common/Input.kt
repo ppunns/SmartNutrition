@@ -209,3 +209,69 @@ fun PasswordInputErrorPreview() {
         errorMessage = "Password too short"
     )
 }
+
+@Composable
+fun NumberInput(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    label: String = "",
+    placeholder: String = "",
+    isError: Boolean = false,
+    errorMessage: String = ""
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { newValue ->
+            // Only allow numeric input
+            if (newValue.isEmpty() || newValue.all { it.isDigit() }) {
+                onValueChange(newValue)
+            }
+        },
+        placeholder = { 
+            Text(
+                text = placeholder,
+                style = MobileTypography.bodySmall
+            ) 
+        },
+        modifier = modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 56.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedBorderColor = Color.LightGray,
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White
+        ),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        isError = isError,
+        supportingText = if (isError) {
+            { Text(text = errorMessage, style = MaterialTheme.typography.labelSmall) }
+        } else null,
+        textStyle = MobileTypography.bodySmall
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NumberInputPreview() {
+    NumberInput(
+        value = "123",
+        onValueChange = {},
+        placeholder = "Enter number",
+        isError = false
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NumberInputErrorPreview() {
+    NumberInput(
+        value = "",
+        onValueChange = {},
+        placeholder = "Enter number",
+        isError = true,
+        errorMessage = "Please enter a valid number"
+    )
+}

@@ -1,31 +1,32 @@
 package com.example.smartnutrition.presentation.profile
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
+import androidx.navigation.NavController
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.smartnutrition.presentation.common.PrimaryButton
+import com.example.smartnutrition.data.remote.dto.User
+import com.example.smartnutrition.presentation.common.NutritionInputBottomSheet
+import com.example.smartnutrition.presentation.navgraph.Route
 import com.example.smartnutrition.presentation.profile.components.ProfileAvatar
 import com.example.smartnutrition.presentation.profile.components.ProfileMenuItem
+import com.example.smartnutrition.ui.icons.AppIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,17 +37,39 @@ fun ProfileScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
+
+//    Test Component Baru
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var karbohidratValue by remember { mutableStateOf("854") }
+
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Profile") },
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.White,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
+                    Text(
+                        "Profile",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, "Back")
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Kembali"
+                        )
                     }
-                }
+                },
+                modifier = Modifier.border(
+                    width = 0.5.dp,
+                    color = Color.LightGray.copy(alpha = 0.5f)
+                )
             )
-        }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -62,7 +85,7 @@ fun ProfileScreen(
                 contentAlignment = Alignment.Center
             ) {
                 ProfileAvatar(
-                    photoUrl = "https://example.com/photo.jpg",
+                    photoUrl = "",
                     username = "Kaspun",
                     onEditClick = {}
                 )
@@ -76,13 +99,13 @@ fun ProfileScreen(
 
             // Profile Info Section
             ProfileMenuItem(
-                icon = Icons.Outlined.Person,
+                icon = AppIcons.profile,
                 title = "Username",
                 subtitle = "Kaspun",
                 onClick = { /* Handle click */ }
             )
             ProfileMenuItem(
-                icon = Icons.Outlined.Person,
+                icon = AppIcons.email,
                 title = "Email",
                 subtitle = "kaspun123@gmail.com",
                 onClick = { /* Handle click */ }
@@ -93,13 +116,23 @@ fun ProfileScreen(
                 modifier = Modifier.padding(vertical = 8.dp)
             )
             ProfileMenuItem(
-                icon = Icons.Outlined.Person,
+                icon = AppIcons.protein,
                 title = "Protein",
                 subtitle = "Pantau dan Capai Target Anda Setiap Hari",
-                onClick = { /* Handle click */ }
+                onClick = {
+//                    showInputKalori = true
+                    showBottomSheet = true
+                }
             )
             ProfileMenuItem(
-                icon = Icons.Outlined.Person,
+                icon = AppIcons.bulan,
+                title = "Mode Gelap",
+                subtitle = "Aktifkan Tema Gelap",
+                hasSwitch = true,
+                onSwitchChange = { viewModel.toggleDarkMode() }
+            )
+            ProfileMenuItem(
+                icon = AppIcons.bumi,
                 title = "Bahasa",
                 subtitle = "Pilih bahasa",
                 onClick = { /* Handle click */ }
@@ -113,7 +146,7 @@ fun ProfileScreen(
                     onNavigateToLogin()
                 },
                 modifier = Modifier
-                        .fillMaxWidth()
+                    .fillMaxWidth()
                     .padding(vertical = 24.dp)
                     .height(56.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -123,64 +156,22 @@ fun ProfileScreen(
             ) {
                 Text("Keluar", color = Color.White)
             }
-        }
-    }
-}
-@Composable
-private fun SettingsItem(
-    icon: ImageVector,
-    title: String,
-    subtitle: String? = null,
-    hasSwitch: Boolean = false,
-    switchChecked: Boolean = false,
-    onSwitchChange: ((Boolean) -> Unit)? = null,
-    onClick: (() -> Unit)? = null
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .then(
-                if (onClick != null) {
-                    Modifier.clickable { onClick() }
-                } else {
-                    Modifier
-                }
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = Color(0xFF2196F3),
-            modifier = Modifier.size(24.dp)
-        )
-        Column(
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .weight(1f)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge
-            )
-            if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+
+//            Logika Show ButtonSHeet
+            if (showBottomSheet) {
+                NutritionInputBottomSheet(
+                    title = "Protein",
+                    subtitle = "Pantau dan Capai Target Anda Setiap Hari",
+                    label = "Karbohidrat",
+                    initialValue = karbohidratValue,
+                    onSave = { newValue ->
+                        karbohidratValue = newValue
+                    },
+                    onDismiss = { showBottomSheet = false }
                 )
             }
         }
-        if (hasSwitch) {
-            Switch(
-                checked = switchChecked,
-                onCheckedChange = onSwitchChange,
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color(0xFF2196F3),
-                    checkedTrackColor = Color(0xFFBBDEFB)
-                )
-            )
-        }
     }
 }
+
+

@@ -19,11 +19,11 @@ class AuthRepositoryImpl @Inject constructor(
         val response = api.login(LoginRequest(email, password))
         // Simpan token
         prefs.edit()
-            .putString("auth_token", response.data.token)
+            .putString("auth_token", response.token)
             .apply()
 
         // Log respons login yang sukses
-        Log.d("Login Response", response.message)
+        Log.d("Login Response", response.status)
         Result.success(response)
     } catch(e: Exception) {
         Result.failure(e)
@@ -37,11 +37,11 @@ class AuthRepositoryImpl @Inject constructor(
         val response = api.register(RegisterRequest(username,email, password))
         // Simpan token
         prefs.edit()
-            .putString("auth_token", response.data.token)
+            .putString("auth_token", response.token)
             .apply()
 
         // Log respons login yang sukses
-        Log.d("Login Response", response.message)
+        Log.d("Login Response", response.status)
         Result.success(response)
     }catch (e:Exception){
         Result.failure(e)

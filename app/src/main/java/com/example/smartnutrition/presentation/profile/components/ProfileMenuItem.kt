@@ -2,37 +2,33 @@ package com.example.smartnutrition.presentation.profile.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.smartnutrition.ui.theme.MobileTypography
-import com.example.smartnutrition.ui.theme.SmartNutritionTheme
 
 @Composable
 fun ProfileMenuItem(
-    icon: ImageVector,
+    icon: Int,
     title: String,
     subtitle: String? = null,
+    hasSwitch: Boolean = false,
+    switchChecked: Boolean = false,
+    onSwitchChange: ((Boolean) -> Unit)? = null,
     onClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .padding(vertical = 16.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Row(
             modifier = Modifier
                 .width(50.dp)
@@ -40,14 +36,15 @@ fun ProfileMenuItem(
                 .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 4.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Icon(
-                imageVector = icon,
+                painter = painterResource(id = icon),
                 contentDescription = null,
                 tint = Color(0xFF2196F3),
                 modifier = Modifier.size(20.dp)
             )
         }
+        
         Column(
             modifier = Modifier
                 .padding(start = 5.dp)
@@ -67,18 +64,21 @@ fun ProfileMenuItem(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun ItemPreview() {
-    SmartNutritionTheme {
-        ProfileMenuItem(
-            icon = Icons.Outlined.Person,
-            title = "Username",
-            subtitle = "Kaspun",
-            onClick = { /* Handle click */ }
-        )
+        
+        if (hasSwitch) {
+            Switch(
+                checked = switchChecked,
+                onCheckedChange = onSwitchChange,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color(0xFF2196F3),
+                    checkedTrackColor = Color(0xFFBBDEFB),
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = Color.LightGray,
+                    uncheckedBorderColor = Color.Transparent,
+                    checkedBorderColor = Color.Transparent
+                ),
+                modifier = Modifier.padding(end = 16.dp)
+            )
+        }
     }
 }

@@ -23,6 +23,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -61,22 +64,40 @@ import kotlinx.coroutines.delay
 import java.util.concurrent.Executor
 
 @Composable
-fun CameraScreen (
+fun CameraScreen(
     viewModel: CameraViewModel = hiltViewModel(),
     navigate:(String) -> Unit
 ) {
     val cameraState: CameraState by viewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    CameraContent(
-        lastCapturedPhoto = cameraState.capturedImage,
-        onExitClick = { navigate(Route.HomeScreen.route) } // Changed from CameraScanning to HomeScreen
-    )
+    LaunchedEffect(cameraState.classification) {
+        cameraState.classification?.let { result ->
+            val message = "Buah terdeteksi: ${result.className} (${String.format("%.2f", result.confidence * 100)}%)"
+            snackbarHostState.showSnackbar(message)
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues)) {
+            CameraContent(
+                lastCapturedPhoto = cameraState.capturedImage,
+                onExitClick = { navigate(Route.HomeScreen.route) },
+                onPhotoTaken = { bitmap ->
+                    viewModel.classifyImage(bitmap)
+                }
+            )
+        }
+    }
 }
 
 @Composable
 private fun CameraContent(
     lastCapturedPhoto: Bitmap? = null,
-    onExitClick: () -> Unit = {}
+    onExitClick: () -> Unit = {},
+    onPhotoTaken: (Bitmap) -> Unit
 ) {
     val context: Context = LocalContext.current
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
@@ -198,6 +219,7 @@ private fun CameraContent(
                         cameraController,
                         onCaptured = { bitmap ->
                             isLoading = false
+                            onPhotoTaken(bitmap)
                         }
                     )
                 },

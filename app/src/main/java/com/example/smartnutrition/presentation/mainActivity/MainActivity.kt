@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) {
-                    NavGraph(starDestination = viewModel.startDestination.value)
+                    NavGraph(startDestination = viewModel.startDestination.value)
                 }
             }
         }
