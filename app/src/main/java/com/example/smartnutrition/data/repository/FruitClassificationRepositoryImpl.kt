@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import com.example.smartnutrition.data.model.FruitClassificationResult
 import com.example.smartnutrition.domain.repository.FruitClassificationRepository
 import com.example.smartnutrition.ml.Model
+import com.example.smartnutrition.ml.Models
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.tensorflow.lite.DataType
@@ -19,7 +20,7 @@ class FruitClassificationRepositoryImpl @Inject constructor(
 
     override suspend fun classifyImage(bitmap: Bitmap): Flow<Result<FruitClassificationResult>> = flow {
         try {
-            val model = Model.newInstance(context)
+            val model = Models.newInstance(context)
             val imageSize = 32
 
             // Preprocess image
@@ -34,13 +35,12 @@ class FruitClassificationRepositoryImpl @Inject constructor(
             var pixel = 0
             for (i in 0 until imageSize) {
                 for (j in 0 until imageSize) {
-                    val `val` = intValues[pixel++]
-                    byteBuffer.putFloat((((`val` shr 16) and 0xFF) * (1f / 255f)))
-                    byteBuffer.putFloat((((`val` shr 8) and 0xFF) * (1f / 255f)))
-                    byteBuffer.putFloat(((`val` and 0xFF) * (1f / 255f)))
+                    val `val` = intValues[pixel++] // RGB
+                    byteBuffer.putFloat((((`val` shr 16) and 0xFF) * (1f / 1))) // Seharusnya 1f/255f
+                    byteBuffer.putFloat((((`val` shr 8) and 0xFF) * (1f / 1)))  // Seharusnya 1f/255f
+                    byteBuffer.putFloat(((`val` and 0xFF) * (1f / 1)))          // Seharusnya 1f/255f
                 }
             }
-
             inputFeature0.loadBuffer(byteBuffer)
 
             val outputs = model.process(inputFeature0)
@@ -56,8 +56,9 @@ class FruitClassificationRepositoryImpl @Inject constructor(
                     maxPos = i
                 }
             }
-
-            val classes = listOf("apple", "banana", "orange")
+            val classes = listOf(
+                "Apple braeburn", "Wortel", "Timun", "Terong Panjang", "Pear"
+            )
             val result = if (maxPos < classes.size) {
                 FruitClassificationResult(classes[maxPos], maxConfidence)
             } else {

@@ -298,8 +298,24 @@ private fun capturePhoto(
             val correctedBitmap: Bitmap = image
                 .toBitmap()
                 .rotateBitmap(image.imageInfo.rotationDegrees)
-
-            onCaptured(correctedBitmap)
+            
+            // Ambil bagian tengah gambar
+            val dimension = minOf(correctedBitmap.width, correctedBitmap.height)
+            val x = (correctedBitmap.width - dimension) / 2
+            val y = (correctedBitmap.height - dimension) / 2
+            
+            val croppedBitmap = Bitmap.createBitmap(
+                correctedBitmap,
+                x,
+                y,
+                dimension,
+                dimension
+            )
+            
+            // Resize menjadi 32x32 piksel
+            val resizedBitmap = Bitmap.createScaledBitmap(croppedBitmap, 32, 32, true)
+            
+            onCaptured(resizedBitmap)
             image.close()
         }
         override fun onError(exception: ImageCaptureException) {
