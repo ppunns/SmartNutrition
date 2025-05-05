@@ -2,12 +2,14 @@ package com.example.smartnutrition.presentation.common
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -68,25 +70,11 @@ fun NutritionInputBottomSheet(
                     .align(Alignment.Start)
                     .padding(bottom = 8.dp)
             )
-
-            // Input Field
-            OutlinedTextField(
+            NumberInput(
                 value = inputValue,
-                onValueChange = { inputValue = it },
+                onValueChange = {inputValue = it},
                 modifier = Modifier
-                    .height(56.dp)  // Adjusted height to match button
-                    .fillMaxWidth()
-                    .padding(bottom = 24.dp),
-                shape = RoundedCornerShape(100.dp),  // Rounded corners like button
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    containerColor = Color.White,
-                    focusedBorderColor = Color(0xFF106DF1),
-                    unfocusedBorderColor = Color.LightGray
-                ),
-                singleLine = true,
-                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
-                    keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
-                )
+                    .padding(bottom = 24.dp)
             )
 
             // Replace the standard Button with PrimaryButton
