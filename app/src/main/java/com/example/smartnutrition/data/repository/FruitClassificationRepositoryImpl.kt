@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.example.smartnutrition.data.model.FruitClassificationResult
 import com.example.smartnutrition.domain.repository.FruitClassificationRepository
-import com.example.smartnutrition.ml.Model
 import com.example.smartnutrition.ml.Models
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

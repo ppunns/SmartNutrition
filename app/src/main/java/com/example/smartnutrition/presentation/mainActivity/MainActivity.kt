@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         
         // Periksa dan minta izin kamera
-        checkCameraPermission()
+//        checkCameraPermission()
         
         installSplashScreen().apply {
             setKeepOnScreenCondition(condition = { viewModel.splashCondition.value })
@@ -75,19 +75,19 @@ class MainActivity : ComponentActivity() {
         }
     }
     
-    // Fungsi untuk memeriksa dan meminta izin kamera
-    private fun checkCameraPermission() {
-        when {
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                // Izin sudah diberikan
-            }
-            else -> {
-                // Minta izin
-                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-            }
-        }
-    }
+//    // Fungsi untuk memeriksa dan meminta izin kamera
+//    private fun checkCameraPermission() {
+//        when {
+//            ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.CAMERA
+//            ) == PackageManager.PERMISSION_GRANTED -> {
+//                // Izin sudah diberikan
+//            }
+//            else -> {
+//                // Minta izin
+//                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+//            }
+//        }
+//    }
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartnutrition.data.manager.TokenManager
+import com.example.smartnutrition.domain.repository.AuthRepository
 import com.example.smartnutrition.domain.usecases.app_entry.AppEntryUseCases
 import com.example.smartnutrition.presentation.navgraph.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val appEntryUseCases: AppEntryUseCases,
-    private val tokenManager: TokenManager  // Tambahkan ini
-):ViewModel() {
+    private val tokenManager: TokenManager,
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _splashCondition = mutableStateOf(true)
     val splashCondition:State<Boolean> = _splashCondition
 
@@ -27,13 +29,20 @@ class MainViewModel @Inject constructor(
     init {
         appEntryUseCases.readAppEntry().onEach { shouldStartFromHomeScreen ->
             if(shouldStartFromHomeScreen){
-                // Cek token
-                if (!tokenManager.getToken().isNullOrEmpty()) {
+                // Verifikasi token
+                val isTokenValid = try {
+                    authRepository.verifyToken().isSuccess
+                } catch (e: Exception) {
+                    false
+                }
+                
+                if (isTokenValid) {
                     _startDestination.value = Route.HomeScreen.route
                 } else {
+                    tokenManager.deleteToken() // Hapus token tidak valid
                     _startDestination.value = Route.LoginScreen.route
                 }
-            }else{
+            } else {
                 _startDestination.value = Route.AppStartNavigation.route
             }
             delay(200)

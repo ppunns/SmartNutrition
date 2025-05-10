@@ -227,21 +227,24 @@ fun HomeScreen(
             )
         }
 
-        PrimaryFloatingActionButton(
-            onClick = {
-                if (cameraPermissionState.status.isGranted) {
-                    navigate(Route.CameraScanning.route)
-                } else {
-                    cameraPermissionState.launchPermissionRequest()
-                }
-            },
-            icon = R.drawable.scanicons,
-            contentDescription = "Scan Food",
+        // Floating Action Button di bagian bawah
+        Box(
             modifier = Modifier
-                .padding(horizontal = 24.dp, vertical = 24.dp)  // Sesuaikan padding
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        )
+                .padding(horizontal = 24.dp, vertical = 24.dp)
+        ) {
+            PrimaryFloatingActionButton(
+                onClick = {
+                    if (cameraPermissionState.status.isGranted) {
+                        navigate(Route.CameraScanning.route)
+                    } else {
+                        cameraPermissionState.launchPermissionRequest()
+                    }
+                },
+                icon = R.drawable.scanicons,
+                contentDescription = "Scan Buah"
+            )
+        }
     }
 }
 

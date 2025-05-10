@@ -22,10 +22,28 @@ object NetworkModule {
     @Singleton
     fun provideAuthApi(): AuthApi {
         return Retrofit.Builder()
-            .baseUrl("http://34.101.71.0:8080")
+            .baseUrl("http://34.101.71.0:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AuthApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNutritionApi(): NutritionApi {
+        return Retrofit.Builder()
+            .baseUrl("http://34.101.96.119:8080/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(NutritionApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHistoryRepository(
+        api: NutritionApi
+    ): HistoryRepository {
+        return HistoryRepositoryImpl(api)
     }
 
     @Provides

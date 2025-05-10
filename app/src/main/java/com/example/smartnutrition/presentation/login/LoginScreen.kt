@@ -60,17 +60,17 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val state by viewModel.state.collectAsState()
-    
-    // State untuk snackbar
+    val snackbarMessage by viewModel.snackbarMessage.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     
-    // Effect untuk menampilkan snackbar saat ada error
-    LaunchedEffect(state.error) {
-        if (state.error != null) {
+    // Effect untuk menampilkan snackbar message
+    LaunchedEffect(snackbarMessage) {
+        snackbarMessage?.let {
             snackbarHostState.showSnackbar(
-                message = state.error!!,
+                message = it,
                 duration = SnackbarDuration.Short
             )
+            viewModel.resetSnackbarMessage() // Reset setelah menampilkan snackbar
         }
     }
 
@@ -251,7 +251,9 @@ fun LoginScreen(
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.primary
+                    modifier = Modifier.size(48.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    strokeWidth = 4.dp
                 )
             }
         }
@@ -261,7 +263,18 @@ fun LoginScreen(
             hostState = snackbarHostState,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(16.dp)
+                .padding(16.dp),
+            snackbar = { snackbarData ->
+                Snackbar(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    containerColor = if (snackbarMessage?.contains("gagal") == true) 
+                        Color.Red 
+                    else MaterialTheme.colorScheme.primary,
+                    contentColor = Color.White
+                ) {
+                    Text(text = snackbarData.visuals.message)
+                }
+            }
         )
     }
 }

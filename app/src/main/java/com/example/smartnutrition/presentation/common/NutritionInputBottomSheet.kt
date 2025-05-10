@@ -76,7 +76,6 @@ fun NutritionInputBottomSheet(
                 modifier = Modifier
                     .padding(bottom = 24.dp)
             )
-
             // Replace the standard Button with PrimaryButton
             PrimaryButton(
                 text = "Simpan",

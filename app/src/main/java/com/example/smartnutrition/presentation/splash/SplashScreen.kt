@@ -14,7 +14,7 @@ fun SplashScreen(
 ) {
     LaunchedEffect(key1 = true) {
         delay(2000L)
-        if (viewModel.hasToken()) {
+        if (viewModel.isTokenValid()) {
             navController.navigate(Route.HomeScreen.route) {
                 popUpTo(Route.SplashScreen.route) { inclusive = true }
             }

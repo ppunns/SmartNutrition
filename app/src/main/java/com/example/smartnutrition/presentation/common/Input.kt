@@ -39,8 +39,8 @@ fun EmailInput(
     isError: Boolean = false,
     errorMessage: String = ""
 ) {
-    val isEmailValid = value.isEmpty() || value.contains("@")
-    val emailError = if (!isEmailValid) "Email harus mengandung @" else errorMessage
+    val isEmailValid = value.isEmpty() || value.contains("@gmail.com")
+    val emailError = if (!isEmailValid) "Format email tidak valid. Contoh: email@gmail.com" else errorMessage
 
     OutlinedTextField(
         value = value,

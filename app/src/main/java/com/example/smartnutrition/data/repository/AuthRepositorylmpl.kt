@@ -7,6 +7,7 @@ import com.example.smartnutrition.data.model.RegisterRequest
 import com.example.smartnutrition.data.remote.AuthApi
 import com.example.smartnutrition.data.remote.dto.LoginResponse
 import com.example.smartnutrition.data.remote.dto.RegisterResponse
+import com.example.smartnutrition.data.remote.dto.User
 import com.example.smartnutrition.domain.repository.AuthRepository
 import javax.inject.Inject
 
@@ -47,5 +48,14 @@ class AuthRepositoryImpl @Inject constructor(
         Result.failure(e)
     }
 
-
+    override suspend fun verifyToken(): Result<User> {
+        return try {
+            val token = prefs.getString("auth_token", null)
+                ?: return Result.failure(Exception("Token tidak ditemukan"))
+            val response = api.verifyToken("Bearer $token")
+            Result.success(response)
+        }catch (e:Exception){
+            Result.failure(e)
+        }
+    }
 }
