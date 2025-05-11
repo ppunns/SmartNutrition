@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
                     _startDestination.value = Route.HomeScreen.route
                 } else {
                     tokenManager.deleteToken() // Hapus token tidak valid
-                    _startDestination.value = Route.LoginScreen.route
+                    _startDestination.value = Route.HomeScreen.route
                 }
             } else {
                 _startDestination.value = Route.AppStartNavigation.route

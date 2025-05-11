@@ -1,17 +1,11 @@
 package com.example.smartnutrition.presentation.navgraph
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.smartnutrition.presentation.camera.CameraScreen
 import com.example.smartnutrition.presentation.home.HomeScreen
 import com.example.smartnutrition.presentation.home.HomeViewModel
@@ -66,14 +60,13 @@ fun NavGraph(
             )
         }
 
-        composable(route = Route.HomeScreen.route
-        ) {
+
+        composable(route = Route.HomeScreen.route) {
             val viewModel: HomeViewModel = hiltViewModel()
-            HomeScreen (
-                articles = viewModel.news.collectAsLazyPagingItems(),
-                navigate = { destination ->
-                    navController.navigate(destination)
-                }
+            val state = viewModel.historyState.value
+            HomeScreen(
+                DataNutrition = state,
+                navigate = { destination -> navController.navigate(destination) }
             )
         }
 

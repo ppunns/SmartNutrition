@@ -3,8 +3,14 @@ package com.example.smartnutrition.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.smartnutrition.data.remote.AuthApi
+import com.example.smartnutrition.data.remote.NutrisionAPI
 import com.example.smartnutrition.data.repository.AuthRepositoryImpl
+import com.example.smartnutrition.data.repository.NutritionRepositorylmpl
 import com.example.smartnutrition.domain.repository.AuthRepository
+import com.example.smartnutrition.domain.repository.NutritionRepository
+import com.example.smartnutrition.domain.usecases.Nutrition.GetDailyNutritionUseCase
+import com.example.smartnutrition.domain.usecases.Nutrition.GetMonthlyNutritionUseCase
+import com.example.smartnutrition.domain.usecases.Nutrition.NutritionUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,22 +36,30 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideNutritionApi(): NutritionApi {
+    fun provideNutritionApi(): NutrisionAPI {
         return Retrofit.Builder()
             .baseUrl("http://34.101.96.119:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(NutritionApi::class.java)
+            .create(NutrisionAPI::class.java)
     }
-
     @Provides
     @Singleton
-    fun provideHistoryRepository(
-        api: NutritionApi
-    ): HistoryRepository {
-        return HistoryRepositoryImpl(api)
+    fun provideNutritionRepository(
+        api: NutrisionAPI
+    ):NutritionRepository{
+        return NutritionRepositorylmpl(api)
     }
-
+    @Provides
+    @Singleton
+    fun provideNutritionUseCases(
+        nutritionRepository: NutritionRepository
+    ): NutritionUseCase {
+        return NutritionUseCase(
+            getDailyNutritionUseCase = GetDailyNutritionUseCase(nutritionRepository),
+            getMonthlyNutritionUseCase = GetMonthlyNutritionUseCase(nutritionRepository)
+        )
+    }
     @Provides
     @Singleton
     fun provideSharedPreferences(

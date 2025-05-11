@@ -20,7 +20,10 @@ import com.example.smartnutrition.ui.theme.Blue50
 
 @Composable
 fun NutritionIndicatorCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    totalKarbohidrat: Int,
+    totalProtein: Int,
+    totalLemak: Int
 ) {
     Card(
         modifier = modifier
@@ -40,50 +43,128 @@ fun NutritionIndicatorCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             NutrientInfo(
-                value = 582,
+                value = totalKarbohidrat,
+                maxValue = 100,
                 unit = "kcal",
                 label = "Karbohidrat",
-                progress = 0.5f,
-                progressColor = Color(0xFFFFB199)
+                progressColor = Color.Blue
             )
             
             NutrientInfo(
-                value = 58,
+                value = totalProtein,
                 unit = "g",
                 label = "Protein",
-                progress = 1.0f,
+                maxValue = 100,
                 progressColor = Color(0xFF99FFB3)
             )
             
             NutrientInfo(
-                value = 28,
+                value = totalLemak,
                 unit = "g",
                 label = "Lemak",
-                progress = 0.35f,
+                maxValue = 100,
                 progressColor = Color(0xFFFF9999)
             )
         }
     }
 }
 
+//@Composable
+//private fun NutrientInfo(
+//    value: Int,
+//    unit: String,
+//    label: String,
+//    progress: Float,
+//    progressColor: Color,
+//    modifier: Modifier = Modifier
+//) {
+//    var isAnimated by remember { mutableStateOf(false) }
+//
+//    val animatedProgress by animateFloatAsState(
+//        targetValue = if (isAnimated) progress else 0f,
+//        animationSpec = tween(1000, easing = FastOutSlowInEasing)
+//    )
+//
+//    val animatedValue by animateIntAsState(
+//        targetValue = if (isAnimated) value else 0,
+//        animationSpec = tween(1000, easing = FastOutSlowInEasing)
+//    )
+//
+//    LaunchedEffect(Unit) {
+//        isAnimated = true
+//    }
+//
+//    Column(
+//        horizontalAlignment = Alignment.Start,
+//        modifier = modifier
+//    ) {
+//        Row(
+//            verticalAlignment = Alignment.Bottom
+//        ) {
+//            Text(
+//                text = "$animatedValue",
+//                fontSize = 20.sp,
+//                fontWeight = FontWeight.Bold
+//            )
+//            Text(
+//                text = unit,
+//                fontSize = 13.sp,
+//                color = Color.Gray,
+//                modifier = Modifier.padding(start = 4.dp, bottom = 2.dp)
+//            )
+//        }
+//
+//        Text(
+//            text = label,
+//            fontSize = 13.sp,
+//            color = Color.Gray
+//        )
+//
+//        Spacer(modifier = Modifier.height(5.dp))
+//
+//        Box(
+//            modifier = Modifier
+//                .width(80.dp)
+//                .height(5.dp)
+//                .clip(RoundedCornerShape(2.dp))
+//                .background(Color(0xFFE0E0E0))
+//        ) {
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxHeight()
+//                    .fillMaxWidth(animatedProgress)
+//                    .clip(RoundedCornerShape(2.dp))
+//                    .background(progressColor)
+//            )
+//        }
+//
+//        Spacer(modifier = Modifier.height(10.dp))
+//
+//        Text(
+//            text = "${(progress * 100).toInt()}%",
+//            fontSize = 10.sp,
+//            color = Color.Gray
+//        )
+//    }
+//}
 @Composable
 private fun NutrientInfo(
     value: Int,
+    maxValue: Int,
     unit: String,
     label: String,
-    progress: Float,
     progressColor: Color,
     modifier: Modifier = Modifier
 ) {
     var isAnimated by remember { mutableStateOf(false) }
-    
-    val animatedProgress by animateFloatAsState(
-        targetValue = if (isAnimated) progress else 0f,
-        animationSpec = tween(1000, easing = FastOutSlowInEasing)
-    )
-    
+
     val animatedValue by animateIntAsState(
         targetValue = if (isAnimated) value else 0,
+        animationSpec = tween(1000, easing = FastOutSlowInEasing)
+    )
+
+    val animatedProgress by animateFloatAsState(
+        targetValue = if (isAnimated) value / maxValue.toFloat() else 0f,
         animationSpec = tween(1000, easing = FastOutSlowInEasing)
     )
 
@@ -110,15 +191,15 @@ private fun NutrientInfo(
                 modifier = Modifier.padding(start = 4.dp, bottom = 2.dp)
             )
         }
-        
+
         Text(
             text = label,
             fontSize = 13.sp,
             color = Color.Gray
         )
-        
+
         Spacer(modifier = Modifier.height(5.dp))
-        
+
         Box(
             modifier = Modifier
                 .width(80.dp)
@@ -129,24 +210,22 @@ private fun NutrientInfo(
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .fillMaxWidth(animatedProgress)
+                    .fillMaxWidth(animatedProgress.coerceIn(0f, 1f))
                     .clip(RoundedCornerShape(2.dp))
                     .background(progressColor)
             )
         }
-//
-//        Spacer(modifier = Modifier.height(10.dp))
-//
-//        Text(
-//            text = "${(progress * 100).toInt()}%",
-//            fontSize = 10.sp,
-//            color = Color.Gray
-//        )
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
 fun NutritionIndicatorCardPreview() {
-    NutritionIndicatorCard()
+    NutritionIndicatorCard(
+        modifier = TODO(),
+        totalKarbohidrat = 100,
+        totalProtein = 100,
+        totalLemak = 100
+    )
 }

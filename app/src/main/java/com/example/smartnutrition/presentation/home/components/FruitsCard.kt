@@ -1,6 +1,5 @@
 package com.example.smartnutrition.presentation.home.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,22 +13,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.smartnutrition.domain.model.Article
-import com.example.smartnutrition.domain.model.Source
+import com.example.smartnutrition.domain.model.Item
 import com.example.smartnutrition.ui.theme.Blue50
-import com.example.smartnutrition.ui.theme.SmartNutritionTheme
-
-
 
 
 @Composable
 fun FruitsCard(
     modifier: Modifier = Modifier,
-    article: Article,
+    nutrition: Item,
     onClick: (() -> Unit)? = null
 ) {
     Card(
@@ -57,7 +51,7 @@ fun FruitsCard(
             ) {
                 // Tambahkan konfigurasi untuk Coil
                 AsyncImage(
-                    model = article.urlToImage,
+                    model = "",
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -71,7 +65,7 @@ fun FruitsCard(
 
             Column {
                 Text(
-                    text = article.title,
+                    text = nutrition.fruitName,
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight(600),
@@ -83,7 +77,7 @@ fun FruitsCard(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = article.publishedAt,
+                    text = nutrition.timestamp,
                     style = TextStyle(
                         fontSize = 13.sp,
                         lineHeight = 16.sp,
@@ -98,26 +92,6 @@ fun FruitsCard(
                 )
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun FruitsCardPreview() {
-    SmartNutritionTheme {
-        FruitsCard(
-            article = Article(
-                author = "John Doe",
-                content = "Sample content for preview",
-                description = "Sample description",
-                publishedAt = "2024-01-01",
-                source = Source(id = "sample-id", name = "Sample Source"),
-                title = "Sample Fruit Article",
-                url = "",
-                urlToImage = ""
-            )
-        )
     }
 }
 
