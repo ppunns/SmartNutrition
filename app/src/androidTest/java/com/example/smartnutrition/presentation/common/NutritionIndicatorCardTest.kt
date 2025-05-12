@@ -13,9 +13,6 @@ class NutritionIndicatorCardTest {
 
     @Test
     fun nutritionIndicatorDisplaysCorrectly() {
-        composeTestRule.setContent {
-            NutritionIndicatorCard()
-        }
         // Verifikasi nilai karbohidrat
         composeTestRule.onNodeWithText("582").assertIsDisplayed()
         composeTestRule.onNodeWithText("Karbohidrat").assertIsDisplayed()

@@ -2,7 +2,7 @@ package com.example.smartnutrition.data.remote.dto
 
 import com.example.smartnutrition.domain.model.Data
 
-data class DailyNutritionResponse(
+data class NutritionResponse(
     val `data`: Data,
     val success: Boolean
 )

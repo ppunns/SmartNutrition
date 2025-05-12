@@ -8,7 +8,9 @@ import com.example.smartnutrition.data.repository.AuthRepositoryImpl
 import com.example.smartnutrition.data.repository.NutritionRepositorylmpl
 import com.example.smartnutrition.domain.repository.AuthRepository
 import com.example.smartnutrition.domain.repository.NutritionRepository
+import com.example.smartnutrition.domain.usecases.Nutrition.GetDailyHistoryNutritionUseCase
 import com.example.smartnutrition.domain.usecases.Nutrition.GetDailyNutritionUseCase
+import com.example.smartnutrition.domain.usecases.Nutrition.GetMonthlyHistoryNutritionUseCase
 import com.example.smartnutrition.domain.usecases.Nutrition.GetMonthlyNutritionUseCase
 import com.example.smartnutrition.domain.usecases.Nutrition.NutritionUseCase
 import dagger.Module
@@ -57,7 +59,9 @@ object NetworkModule {
     ): NutritionUseCase {
         return NutritionUseCase(
             getDailyNutritionUseCase = GetDailyNutritionUseCase(nutritionRepository),
-            getMonthlyNutritionUseCase = GetMonthlyNutritionUseCase(nutritionRepository)
+            getMonthlyNutritionUseCase = GetMonthlyNutritionUseCase(nutritionRepository),
+            getDailyHistoryNutritionUseCase = GetDailyHistoryNutritionUseCase(nutritionRepository),
+            getMonthlyHistoryNutritionUseCase = GetMonthlyHistoryNutritionUseCase(nutritionRepository)
         )
     }
     @Provides

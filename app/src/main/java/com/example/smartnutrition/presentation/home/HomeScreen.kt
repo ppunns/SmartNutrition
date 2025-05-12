@@ -103,9 +103,15 @@ fun HomeScreen(
                 when (page) {
                     0 -> {
                         // Daily View
+                        LaunchedEffect(Unit) {
+                            viewModel.updateHistoryType(false)
+                        }
                         DailyView(viewModel)
                     }
                     1 -> {
+                        LaunchedEffect(Unit) {
+                            viewModel.updateHistoryType(true)
+                        }
                         // Monthly View
                         DailyView(viewModel)
                     }
@@ -204,7 +210,6 @@ fun DailyView(viewModel: HomeViewModel) {
                         }
                     }
                 } else {
-                    // Tampilkan list jika ada data
                     viewModel.historyState.value.data?.data?.items?.let { items ->
                         items(items.size) { index ->
                             FruitsCard(
