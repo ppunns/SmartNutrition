@@ -1,12 +1,15 @@
 package com.example.smartnutrition.presentation.profile
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.smartnutrition.data.manager.TokenManager
-import com.example.smartnutrition.data.remote.dto.User
+import com.example.smartnutrition.domain.manger.LocalUserManger
+import com.example.smartnutrition.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,26 +18,35 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
     private val _state = MutableStateFlow(ProfileState())
     val state = _state.asStateFlow()
-
-
     fun toggleDarkMode() {
         _state.update { it.copy(isDarkMode = !it.isDarkMode) }
     }
-
-    fun updateLanguage(language: String) {
-        _state.update { it.copy(selectedLanguage = language) }
+    init {
+        loadUserData()
     }
 
-    fun updateProfile(username: String, email: String) {
-        _state.update {
-            it.copy(
-                username = username,
-                email = email
-            )
+    private fun loadUserData() {
+        viewModelScope.launch {
+            try {
+                tokenManager.getUserData.collect{ user ->
+                    _state.update { currentState ->
+                        currentState.copy(
+                            username = user.name,
+                            email = user.email,
+                            profilePicture = user.profile_picture,
+                            isLoading = false
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                _state.update { it.copy(error = e.message, isLoading = false) }
+            }
         }
     }
 
     fun logout() {
-        tokenManager.deleteToken()
+        viewModelScope.launch {
+            tokenManager.clearToken()
+        }
     }
 }

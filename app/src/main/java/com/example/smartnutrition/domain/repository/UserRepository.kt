@@ -1,14 +1,10 @@
 package com.example.smartnutrition.domain.repository
 
-
-import android.net.Uri
 import com.example.smartnutrition.data.remote.dto.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    fun getUser(): Flow<User>
-    suspend fun updateUser(user: User)
-    suspend fun updateProfilePhoto(photoUri: Uri): String
-    suspend fun updateProteinTarget(proteinTarget: Int)
+    suspend fun getUser(): Flow<User>
+    suspend fun saveUser(user: User)
     suspend fun logout()
 }

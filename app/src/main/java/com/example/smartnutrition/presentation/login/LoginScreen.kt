@@ -45,6 +45,7 @@ import com.example.smartnutrition.presentation.common.BlueCircleElement
 import com.example.smartnutrition.presentation.common.EmailInput
 import com.example.smartnutrition.presentation.common.PasswordInput
 import com.example.smartnutrition.presentation.common.PrimaryButton
+import com.example.smartnutrition.presentation.common.SharedViewModel
 import com.example.smartnutrition.ui.theme.Blue100
 import com.example.smartnutrition.ui.theme.Blue200
 import com.example.smartnutrition.ui.theme.Blue50
@@ -55,7 +56,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -205,7 +206,13 @@ fun LoginScreen(
                 ) + fadeIn(animationSpec = tween(durationMillis = 300))
             ) {
                 PrimaryButton(
-                    onClick = { viewModel.login(email, password) },
+                    onClick = { 
+                        if (email.isBlank() || password.isBlank()) {
+                            viewModel.showMessage("Silakan isi email dan password terlebih dahulu.")
+                        } else {
+                            viewModel.login(email, password)
+                        }
+                    },
                     text = "Login"
                 )
             }
@@ -250,11 +257,24 @@ fun LoginScreen(
                     .background(Color.Black.copy(alpha = 0.5f)),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(48.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                    strokeWidth = 4.dp
-                )
+                    Column(
+                        modifier = Modifier.padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp),
+                            color = Color.White,
+                            strokeWidth = 4.dp
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "Sedang masuk...",
+                            color = Color.White,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+
             }
         }
 
@@ -306,12 +326,4 @@ fun SimpleCard() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen(
-        viewModel = hiltViewModel(),
-        navController = rememberNavController()
-    )
-}
 

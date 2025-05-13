@@ -1,5 +1,6 @@
 package com.example.smartnutrition.data.remote
 
+import com.example.smartnutrition.data.remote.dto.LoginResponse
 import com.example.smartnutrition.data.remote.dto.NutritionResponse
 import retrofit2.Response
 import retrofit2.http.GET

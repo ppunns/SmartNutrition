@@ -29,9 +29,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartnutrition.ui.theme.MobileTypography
 
 @Composable
-fun NutritionInfo(
+fun     NutritionInfo(
     value: Int,
     maxValue: Int,
     unit: String,
@@ -64,12 +65,11 @@ fun NutritionInfo(
         ) {
             Text(
                 text = "$animatedValue",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                style = MobileTypography.headlineMedium.copy(fontSize =  24.sp)
             )
             Text(
                 text = unit,
-                fontSize = 13.sp,
+                style = MobileTypography.titleMedium.copy(fontSize = 12.sp),
                 color = Color.Gray,
                 modifier = Modifier.padding(start = 4.dp, bottom = 2.dp)
             )
@@ -77,7 +77,7 @@ fun NutritionInfo(
 
         Text(
             text = label,
-            fontSize = 13.sp,
+            style = MobileTypography.labelLarge.copy(fontSize = 12.sp),
             color = Color.Gray
         )
 

@@ -85,7 +85,7 @@ fun ProfileScreen(
                 contentAlignment = Alignment.Center
             ) {
                 ProfileAvatar(
-                    photoUrl = "",
+                    photoUrl = state.profilePicture,
                     username = "Kaspun",
                     onEditClick = {}
                 )
@@ -101,13 +101,13 @@ fun ProfileScreen(
             ProfileMenuItem(
                 icon = AppIcons.profile,
                 title = "Username",
-                subtitle = "Kaspun",
+                subtitle = state.username,
                 onClick = { /* Handle click */ }
             )
             ProfileMenuItem(
                 icon = AppIcons.email,
                 title = "Email",
-                subtitle = "kaspun123@gmail.com",
+                subtitle = state.email,
                 onClick = { /* Handle click */ }
             )
             Text(

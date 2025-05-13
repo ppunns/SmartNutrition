@@ -21,6 +21,7 @@ import androidx.compose.material3.Surface
 
 import androidx.compose.ui.Alignment
 import com.example.smartnutrition.ui.theme.Blue50
+import com.example.smartnutrition.ui.theme.MobileTypography
 
 
 data class NutrientInfo(
@@ -128,7 +129,7 @@ fun NutritionFactsCard(
                     }
                     Text(
                         text = nutrient.name,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MobileTypography.titleMedium.copy(fontSize = 12.sp),
                         fontWeight = FontWeight.Bold
                     )
                     Divider(modifier = Modifier.padding(vertical = 10.dp))
@@ -147,12 +148,12 @@ fun NutritionFactsCard(
                     ) {
                         Text(
                             text = nutrient.name,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MobileTypography.titleMedium.copy(fontSize = 12.sp),
                             color = if (nutrient.isSubItem) Color.Gray else Color.Black
                         )
                         Text(
                             text = nutrient.value,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MobileTypography.titleMedium.copy(fontSize = 12.sp),
                             fontWeight = FontWeight.Medium
                         )
                     }

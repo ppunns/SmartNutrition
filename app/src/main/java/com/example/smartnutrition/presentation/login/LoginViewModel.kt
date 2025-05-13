@@ -1,9 +1,11 @@
 package com.example.smartnutrition.presentation.login
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartnutrition.data.manager.TokenManager
 import com.example.smartnutrition.domain.repository.AuthRepository
+import com.example.smartnutrition.presentation.common.SharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
@@ -11,11 +13,14 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import retrofit2.HttpException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val tokenManager: TokenManager,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
     
     private val _state = MutableStateFlow(LoginState())
@@ -28,9 +33,36 @@ class LoginViewModel @Inject constructor(
         _snackbarMessage.value = null
     }
 
+    fun showMessage(message: String) {
+        _snackbarMessage.value = message
+    }
+
+    fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun isValidPassword(password: String): Boolean {
+        return password.length >= 8 // minimal 8 karakter
+    }
+
     fun login(email: String, password: String) {
         viewModelScope.launch {
             try {
+                if (email.isBlank() || password.isBlank()) {
+                    _snackbarMessage.value = "Username atau password harus diisi dulu"
+                    return@launch
+                }
+
+                if (!isValidPassword(password)) {
+                    _snackbarMessage.value = "Password minimal 8 karakter"
+                    return@launch
+                }
+                
+                if (!isValidEmail(email)) {
+                    _snackbarMessage.value = "Format email tidak valid"
+                    return@launch
+                }
+                
                 _state.update { it.copy(isLoading = true, error = null) }
                 
                 // Tambahkan delay 2 detik
@@ -40,23 +72,38 @@ class LoginViewModel @Inject constructor(
                     .onSuccess { response ->
                         // Save the actual token from response
                         tokenManager.saveToken(response.token)
-                        tokenManager.saveUserId(response.user.id.toString())
+                        tokenManager.saveUserData(
+                            user = response.user
+                        )
                         _state.update {
                             it.copy(
                                 isSuccess = true,
                                 isLoading = false
                             )
                         }
-                        _snackbarMessage.value = "Login berhasil"
+                        _snackbarMessage.value = response.status
                     }
                     .onFailure { exception ->
+                        val errorMessage = when (exception) {
+                            is UnknownHostException -> "Tidak ada koneksi internet"
+                            is SocketTimeoutException -> "Koneksi timeout"
+                            is HttpException -> {
+                                when (exception.code()) {
+                                    401 -> "Email atau password salah"
+                                    503 -> "Server sedang maintenance"
+                                    else -> "Terjadi kesalahan: ${exception.message}"
+                                }
+                            }
+                            else -> "Terjadi kesalahan yang tidak diketahui"
+                        }
+                        
                         _state.update {
                             it.copy(
                                 isLoading = false,
-                                error = exception.message ?: "Login failed"
+                                error = errorMessage
                             )
                         }
-                        _snackbarMessage.value = "Login gagal"
+                        _snackbarMessage.value = errorMessage
                     }
             } catch (e: Exception) {
                 _state.update {

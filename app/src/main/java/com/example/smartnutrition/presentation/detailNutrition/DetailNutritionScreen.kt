@@ -43,11 +43,11 @@ fun DetailNutritionScreen(
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color.White,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
                     Text(
                         "Detail Nutrisi",
+                        style = MobileTypography.titleLarge,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -76,12 +76,12 @@ fun DetailNutritionScreen(
         ) {
             Text(
                 text = "Appel",
-                style = MobileTypography.headlineLarge,
+                style = MobileTypography.headlineLarge.copy(fontSize = 32.sp),
                 modifier = Modifier.padding(bottom = 16.dp)
             )
             Text(
                 text = "Informasi Nutrisi",
-                style = MobileTypography.bodySmall,
+                style = MobileTypography.labelSmall,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
             NutritionFullIndicatorCard(

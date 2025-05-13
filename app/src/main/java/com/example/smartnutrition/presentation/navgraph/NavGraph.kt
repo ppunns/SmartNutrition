@@ -2,11 +2,13 @@ package com.example.smartnutrition.presentation.navgraph
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.smartnutrition.presentation.camera.CameraScreen
+import com.example.smartnutrition.presentation.common.SharedViewModel
 import com.example.smartnutrition.presentation.home.HomeScreen
 import com.example.smartnutrition.presentation.home.HomeViewModel
 import com.example.smartnutrition.presentation.login.LoginScreen
@@ -21,7 +23,6 @@ fun NavGraph(
     startDestination: String = Route.SplashScreen.route
 ) {
     val navController = rememberNavController()
-
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = Route.SplashScreen.route) {
             SplashScreen(navController = navController)

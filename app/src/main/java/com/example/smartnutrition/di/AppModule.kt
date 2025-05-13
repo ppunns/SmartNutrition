@@ -8,6 +8,7 @@ import com.example.smartnutrition.domain.manger.LocalUserManger
 import com.example.smartnutrition.domain.usecases.app_entry.AppEntryUseCases
 import com.example.smartnutrition.domain.usecases.app_entry.ReadAppEntry
 import com.example.smartnutrition.domain.usecases.app_entry.SaveAppEntry
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -2,6 +2,7 @@ package com.example.smartnutrition.presentation.home
 
 import FruitsCardShimmerEffect
 import android.Manifest
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,9 +16,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartnutrition.R
 import com.example.smartnutrition.presentation.common.PrimaryFloatingActionButton
+import com.example.smartnutrition.presentation.common.SharedViewModel
 import com.example.smartnutrition.presentation.common.SmartNutritionTopBar
 import com.example.smartnutrition.presentation.home.components.CalorieProgressIndicator
 import com.example.smartnutrition.presentation.home.components.FruitsCard
@@ -49,6 +56,7 @@ fun HomeScreen(
     navigate: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+
     val cameraPermissionState: PermissionState =
         rememberPermissionState(Manifest.permission.CAMERA)
 
@@ -212,6 +220,7 @@ fun DailyView(viewModel: HomeViewModel) {
                 } else {
                     viewModel.historyState.value.data?.data?.items?.let { items ->
                         items(items.size) { index ->
+                            Log.d("NutritionItem", "Image URL = ${items[index].imageUrl}")
                             FruitsCard(
                                 nutrition = items[index],
                                 onClick = null,

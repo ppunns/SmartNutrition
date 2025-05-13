@@ -6,7 +6,5 @@ data class Data(
     val totalKalori: Int,
     val totalKarbohidrat: Double,
     val totalLemak: Double,
-    val totalProtein: Double,
-    val fruitLabel: String,
-    val imageUrl: String
+    val totalProtein: Double
 )

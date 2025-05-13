@@ -77,36 +77,12 @@ class HomeViewModel @Inject constructor(
             )
         }
     }
-    private fun fetchDailyHistory() {
-        viewModelScope.launch {
-//            val userId = tokenManager.getUserId() ?: return@launch
-            safeApiCall(
-                apiCall = { nutritionUseCase.getDailyHistoryNutritionUseCase("user1245") },
-                onSuccess = { response ->
-                    _historyState.value = historyState.value.copy(data = response)
-                }
-            )
-        }
-    }
-    private fun fetchMonthlyHistory() {
-        viewModelScope.launch {
-//            val userId = tokenManager.getUserId() ?: return@launch
-            safeApiCall(
-                apiCall = { nutritionUseCase.getMonthlyHistoryNutritionUseCase("user1245") },
-                onSuccess = { response ->
-                    _historyState.value = historyState.value.copy(data = response)
-                }
-            )
-        }
-    }
 
     fun updateHistoryType(isMonthly: Boolean) {
         if (isMonthly) {
             fetchMonthlyNutrition()
-            fetchMonthlyHistory()
         } else {
             fetchDailyNutrition()
-            fetchDailyHistory()
         }
     }
 }
