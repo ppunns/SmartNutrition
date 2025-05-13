@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartnutrition.data.manager.TokenManager
 import com.example.smartnutrition.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +24,7 @@ class SplashViewModel @Inject constructor(
     }
 
     suspend fun isTokenValid(): Boolean {
-        val token = tokenManager.getToken()
+        val token = tokenManager.getToken.first()
         return if (!token.isNullOrEmpty()) {
             verifyToken()
         } else {
