@@ -26,7 +26,6 @@ import coil.compose.AsyncImage
 import com.example.smartnutrition.R
 import com.example.smartnutrition.domain.model.Data
 import com.example.smartnutrition.domain.model.Item
-import com.example.smartnutrition.presentation.login.LoginScreen
 import com.example.smartnutrition.ui.theme.Blue50
 import com.example.smartnutrition.ui.theme.MobileTypography
 import androidx.compose.runtime.getValue
@@ -73,7 +72,7 @@ fun FruitsCard(
                     )
                 } else {
                     AsyncImage(
-                        model = "https://storage.googleapis.com/image-buah/pir.jpg?GoogleAccessId=firestore-accces%40smart-nutrition-app-457602.iam.gserviceaccount.com&Expires=1747212141&Signature=ox%2FPXzR25A7w3TWnYhTa2np2eYV71WE457Dt%2FPFjMyO98cLLCNVBsDReGrQsEJPyDnhQeq4PSghn%2Bqv5IVSY0%2BJTWGt7K8kw0JEDSmM3LrKCprUfAhuE5DMcyS2NOXyMXnCBNe4gH7dP7%2BKHhJ7Q7sg6SjhDdcaSYf3T9FYQnLDoHkniVWrrXFUMy4RYaxd6mVe4cAIhn5wM0YzUs39wejMsPMbpdgbgKRqElKAJm7Vz9DRnRi1lZytgMj9dgvkGm3D%2BfxAzFTJcYTHjcLM4oNmseelNINizqookc%2BuMYoLaCwOh1lew%2BTsVkDxkh3rexECYrf7M3WyfBaTYludaMw%3D%3D",
+                        model = nutrition.imageUrl,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

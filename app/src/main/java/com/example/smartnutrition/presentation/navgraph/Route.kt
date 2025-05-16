@@ -1,6 +1,8 @@
 package com.example.smartnutrition.presentation.navgraph
 
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 sealed class Route(
     val route: String,
@@ -13,9 +15,7 @@ sealed class Route(
     object HomeScreen: Route(route = "homeScreen")
     object ProfileScreen: Route(route = "profileScreen")
     object CameraScanning : Route("camera_scanning")
-
-    object DetailsScreen : Route(route = "detailsScreen")
-
+    object DetailsScreen : Route( route = "details_screen")
     object AppStartNavigation : Route(route = "appStartNavigation")
     object NewsNavigation : Route(route = "newsNavigation")
 }

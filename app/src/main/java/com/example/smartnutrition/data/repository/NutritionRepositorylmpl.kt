@@ -1,7 +1,12 @@
 package com.example.smartnutrition.data.repository
 
+import android.util.Log
+import com.example.smartnutrition.data.model.FruitRequest
+import com.example.smartnutrition.data.model.LoginRequest
 import com.example.smartnutrition.data.remote.NutrisionAPI
+import com.example.smartnutrition.data.remote.dto.LoginResponse
 import com.example.smartnutrition.data.remote.dto.NutritionResponse
+import com.example.smartnutrition.data.remote.dto.toDomain
 import com.example.smartnutrition.domain.repository.NutritionRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -48,7 +53,6 @@ class NutritionRepositorylmpl @Inject constructor(
             emit(Result.failure(e))
         }
     }
-
     override suspend fun getMonthlyHistory(userId: String): Flow<Result<NutritionResponse>> = flow {
         try {
             val response = api.getMonthlyHistory(userId)
@@ -61,8 +65,9 @@ class NutritionRepositorylmpl @Inject constructor(
             emit(Result.failure(e))
         }
     }
-
-    override suspend fun getFruitNutrition(userId: String): Flow<Result<NutritionResponse>> {
-        TODO("Not yet implemented")
+    override suspend fun getNutritionByLabel(label: String): NutritionResponse {
+        val response = api.getFruitDetail(FruitRequest(label = label))
+        return response.data.toDomain()
     }
+
 }

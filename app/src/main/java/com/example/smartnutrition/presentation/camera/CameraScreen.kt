@@ -57,6 +57,7 @@ import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.compose.rememberNavController
 import com.example.smartnutrition.presentation.navgraph.Route
 import com.example.smartnutrition.ui.theme.SmartNutritionTheme
 import com.example.smartnutrition.util.rotateBitmap
@@ -65,25 +66,18 @@ import java.util.concurrent.Executor
 
 @Composable
 fun CameraScreen(
-    viewModel: CameraViewModel = hiltViewModel(),
-    navigate:(String) -> Unit
+    navigate: (String) -> Unit,
+    viewModel: CameraViewModel = hiltViewModel()
 ) {
-    val cameraState: CameraState by viewModel.state.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    LaunchedEffect(cameraState.classification) {
-        cameraState.classification?.let { result ->
-            val message = "Buah terdeteksi: ${result.className} (${String.format("%.2f", result.confidence * 100)}%)"
-            snackbarHostState.showSnackbar(message)
+    val state by viewModel.state.collectAsState()
+    LaunchedEffect(state.classification) {
+        state.classification?.let { result ->
+            Log.d("CameraScreen", "Classification result: ${result.className}")
         }
     }
-
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             CameraContent(
-                lastCapturedPhoto = cameraState.capturedImage,
                 onExitClick = { navigate(Route.HomeScreen.route) },
                 onPhotoTaken = { bitmap ->
                     viewModel.classifyImage(bitmap)
@@ -95,26 +89,14 @@ fun CameraScreen(
 
 @Composable
 private fun CameraContent(
-    lastCapturedPhoto: Bitmap? = null,
     onExitClick: () -> Unit = {},
     onPhotoTaken: (Bitmap) -> Unit
 ) {
     val context: Context = LocalContext.current
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     val cameraController: LifecycleCameraController = remember { LifecycleCameraController(context) }
-
-    // Add states for loading and temporary preview
     var isLoading by remember { mutableStateOf(false) }
-    var tempPreviewPhoto by remember { mutableStateOf<Bitmap?>(null) }
 
-    // Effect to handle temporary preview
-    LaunchedEffect(lastCapturedPhoto) {
-        if (lastCapturedPhoto != null && tempPreviewPhoto != lastCapturedPhoto) {
-            tempPreviewPhoto = lastCapturedPhoto
-            delay(3000) // Show preview for 3 seconds
-            tempPreviewPhoto = null
-        }
-    }
     Box(modifier = Modifier.fillMaxSize()) {
         // Camera Preview (full screen)
         AndroidView(
@@ -254,22 +236,6 @@ private fun CameraContent(
                 )
             }
         }
-        // Temporary photo preview overlay
-        if (tempPreviewPhoto != null) {
-            val capturedPhoto: ImageBitmap = remember(tempPreviewPhoto.hashCode()) {
-                tempPreviewPhoto!!.asImageBitmap()
-            }
-
-            Image(
-                bitmap = capturedPhoto,
-                contentDescription = "Captured photo preview",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .zIndex(2f)
-            )
-        }
-        // Loading indicator
         if (isLoading) {
             Box(
                 modifier = Modifier

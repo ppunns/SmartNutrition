@@ -18,14 +18,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.smartnutrition.presentation.detailNutrition.components.NutritionDetailCard
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartnutrition.data.remote.dto.NutritionResponse
 import com.example.smartnutrition.presentation.detailNutrition.components.NutritionFullIndicatorCard
 import com.example.smartnutrition.presentation.detailNutrition.components.NutritionFactsCard
 import com.example.smartnutrition.presentation.detailNutrition.components.NutrientInfo
@@ -34,8 +36,29 @@ import com.example.smartnutrition.ui.theme.MobileTypography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailNutritionScreen(
-    onNavigateBack: () -> Unit,
+    viewModel: DetailNutritionViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit
 ) {
+
+    val state by viewModel.state.collectAsState()
+    val sampleNutrients = listOf(
+        NutrientInfo("Water", "${state.nutritionData?.data?.water}g"),
+        NutrientInfo("Energy (Atwater General Factors)", "${state.nutritionData?.data?.energy?.atwater}kcal"),
+        NutrientInfo("Energy (Atwater Specific Factors)", "${state.nutritionData?.data?.energy?.specific}kcal"),
+        NutrientInfo("Nitrogen", "${state.nutritionData?.data?.nitrogen}g"),
+        NutrientInfo("Minerals:", ""),
+        NutrientInfo("Calcium, Ca", "${state.nutritionData?.data?.minerals?.calcium}mg", true),
+        NutrientInfo("Iron, Fe", "${state.nutritionData?.data?.minerals?.iron}mg", true),
+        NutrientInfo("Magnesium, Mg", "${state.nutritionData?.data?.minerals?.magnesium}g", true),
+        NutrientInfo("Phosphorus, P", "${state.nutritionData?.data?.minerals?.phosphorus}mg", true),
+        NutrientInfo("Potassium, K", "${state.nutritionData?.data?.minerals?.potassium}mg", true),
+        NutrientInfo("Sodium, Na", "${state.nutritionData?.data?.minerals?.sodium}mg", true),
+        NutrientInfo("Zinc, Zn", "${state.nutritionData?.data?.minerals?.zinc}mg", true),
+        NutrientInfo("Copper, Cu", "${state.nutritionData?.data?.minerals?.copper}mg", true),
+        NutrientInfo("Manganese, Mn", "${state.nutritionData?.data?.minerals?.manganese}mg", true)
+    )
+
+
 
 
     Scaffold(
@@ -74,61 +97,30 @@ fun DetailNutritionScreen(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Text(
-                text = "Appel",
-                style = MobileTypography.headlineLarge.copy(fontSize = 32.sp),
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-            Text(
-                text = "Informasi Nutrisi",
-                style = MobileTypography.labelSmall,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-            NutritionFullIndicatorCard(
-                totalKalori = 582,
-                totalKarbohidrat = 26,
-                totalProtein = 58,
-                totalLemak = 28,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-            NutritionFactsCard(
-                nutrients = listOf(
-                    NutrientInfo("Water", "83.6g"),
-                    NutrientInfo("Energy (Atwater General Factors)", "65kcal"),
-                    NutrientInfo("Energy (Atwater Specific Factors)", "58kcal"),
-                    NutrientInfo("Nitrogen", "0.02g"),
-                    NutrientInfo("Protein", "0.15g"),
-                    NutrientInfo("Total lipid (fat)", "0.16g"),
-                    NutrientInfo("Ash", "0.43g"),
-                    NutrientInfo("Carbohydrates:", ""),
-                    NutrientInfo("Carbohydrate, by difference", "15.4g", true),
-                    NutrientInfo("Carbohydrate, by summation", "15.4g", true),
-                    NutrientInfo("Minerals:", ""),
-                    NutrientInfo("Calcium, Ca", "6mg", true),
-                    NutrientInfo("Iron, Fe", "0.02mg", true),
-                    NutrientInfo("Magnesium, Mg", "4.7g", true),
-                    NutrientInfo("Phosphorus, P", "10mg", true),
-                    NutrientInfo("Potassium, K", "104mg", true),
-                    NutrientInfo("Sodium, Na", "1mg", true),
-                    NutrientInfo("Zinc, Zn", "0.02mg", true),
-                    NutrientInfo("Copper, Cu", "0.033mg", true),
-                    NutrientInfo("Manganese, Mn", "0.033mg", true)
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
+            state.nutritionData?.data?.let {
+                Text(
+                    text = it.name,
+                    style = MobileTypography.headlineLarge.copy(fontSize = 32.sp),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+                Text(
+                    text = "Informasi Nutrisi",
+                    style = MobileTypography.labelSmall,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+                NutritionFullIndicatorCard(
+                    totalKalori = it.totalKalori,
+                    totalKarbohidrat = it.totalKarbohidrat.toInt(),
+                    totalProtein = it.totalProtein.toInt(),
+                    totalLemak = it.totalLemak.toInt(),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+                NutritionFactsCard(
+                    nutrients = sampleNutrients,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
     }
 
-}
-
-@Composable
-@Preview(showBackground = true)
-fun DetailNutritionScreenPreview() {
-    MaterialTheme {
-        Surface {
-            DetailNutritionScreen(
-                onNavigateBack = {}
-            )
-        }
-    }
 }

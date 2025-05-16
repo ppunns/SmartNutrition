@@ -40,7 +40,7 @@ fun ProfileScreen(
 
 //    Test Component Baru
     var showBottomSheet by remember { mutableStateOf(false) }
-    var karbohidratValue by remember { mutableStateOf("854") }
+    var karbohidratValue by remember { mutableStateOf(state.proteinTarget.toString()) }
 
     Scaffold(
         topBar = {

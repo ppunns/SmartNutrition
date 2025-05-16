@@ -6,5 +6,6 @@ data class NutritionUseCase(
     val getDailyNutritionUseCase: GetDailyNutritionUseCase,
     val getMonthlyNutritionUseCase: GetMonthlyNutritionUseCase,
     val getDailyHistoryNutritionUseCase: GetDailyHistoryNutritionUseCase,
-    val getMonthlyHistoryNutritionUseCase: GetMonthlyHistoryNutritionUseCase
+    val getMonthlyHistoryNutritionUseCase: GetMonthlyHistoryNutritionUseCase,
+    val getFruitNutritionUseCase: GetFruitNutritionUseCase
 )

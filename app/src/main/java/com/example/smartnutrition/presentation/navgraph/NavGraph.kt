@@ -1,5 +1,6 @@
 package com.example.smartnutrition.presentation.navgraph
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -7,8 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.smartnutrition.data.remote.dto.NutritionResponse
 import com.example.smartnutrition.presentation.camera.CameraScreen
 import com.example.smartnutrition.presentation.common.SharedViewModel
+import com.example.smartnutrition.presentation.detailNutrition.DetailNutritionScreen
 import com.example.smartnutrition.presentation.home.HomeScreen
 import com.example.smartnutrition.presentation.home.HomeViewModel
 import com.example.smartnutrition.presentation.login.LoginScreen
@@ -60,8 +63,6 @@ fun NavGraph(
                 }
             )
         }
-
-
         composable(route = Route.HomeScreen.route) {
             val viewModel: HomeViewModel = hiltViewModel()
             val state = viewModel.historyState.value
@@ -71,8 +72,7 @@ fun NavGraph(
             )
         }
 
-        composable(route = Route.CameraScanning.route
-        ) {
+        composable(route = Route.CameraScanning.route) {
             CameraScreen(
                 navigate = {destination ->
                     navController.navigate(destination)
@@ -81,7 +81,13 @@ fun NavGraph(
         }
 
         composable(route = Route.DetailsScreen.route) {
-            // Details screen implementation
+            val nutritionData = navController.previousBackStackEntry?.savedStateHandle?.get<NutritionResponse>("nutritionData")
+            nutritionData?.let { data ->
+                DetailNutritionScreen(
+                    nutritionData = data,
+                    onNavigateBack = { navController.navigateUp() }
+                )
+            }
         }
     }
 }

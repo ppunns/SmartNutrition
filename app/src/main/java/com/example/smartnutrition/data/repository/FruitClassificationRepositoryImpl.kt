@@ -56,7 +56,7 @@ class FruitClassificationRepositoryImpl @Inject constructor(
                 }
             }
             val classes = listOf(
-                "Apple braeburn", "Wortel", "Timun", "Terong Panjang", "Pear"
+                "Apple braeburn", "Wortel", "Timun", "Terong Panjang", "Pir"
             )
             val result = if (maxPos < classes.size) {
                 FruitClassificationResult(classes[maxPos], maxConfidence)

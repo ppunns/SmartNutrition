@@ -67,7 +67,6 @@ class LoginViewModel @Inject constructor(
                 
                 // Tambahkan delay 2 detik
                 delay(2000)
-                
                 authRepository.login(email, password)
                     .onSuccess { response ->
                         // Save the actual token from response

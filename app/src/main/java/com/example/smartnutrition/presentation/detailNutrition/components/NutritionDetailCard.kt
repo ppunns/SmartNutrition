@@ -178,26 +178,20 @@ fun NutritionFactsCard(
 @Composable
 fun NutritionFactsPreview() {
     val sampleNutrients = listOf(
-        NutrientInfo("Water", "83.6g"),
-        NutrientInfo("Energy (Atwater General Factors)", "65kcal"),
-        NutrientInfo("Energy (Atwater Specific Factors)", "58kcal"),
-        NutrientInfo("Nitrogen", "0.02g"),
-        NutrientInfo("Protein", "0.15g"),
-        NutrientInfo("Total lipid (fat)", "0.16g"),
-        NutrientInfo("Ash", "0.43g"),
-        NutrientInfo("Carbohydrates:", ""),
-        NutrientInfo("Carbohydrate, by difference", "15.4g", true),
-        NutrientInfo("Carbohydrate, by summation", "15.4g", true),
+        NutrientInfo("Water", "85.6g"),
+        NutrientInfo("Energy (Atwater General Factors)", "3kcal"),
+        NutrientInfo("Energy (Atwater Specific Factors)", "0kcal"),
+        NutrientInfo("Nitrogen", "2.8g"),
         NutrientInfo("Minerals:", ""),
         NutrientInfo("Calcium, Ca", "6mg", true),
-        NutrientInfo("Iron, Fe", "0.02mg", true),
-        NutrientInfo("Magnesium, Mg", "4.7g", true),
-        NutrientInfo("Phosphorus, P", "10mg", true),
-        NutrientInfo("Potassium, K", "104mg", true),
+        NutrientInfo("Iron, Fe", "0.12mg", true),
+        NutrientInfo("Magnesium, Mg", "5g", true),
+        NutrientInfo("Phosphorus, P", "11mg", true),
+        NutrientInfo("Potassium, K", "107mg", true),
         NutrientInfo("Sodium, Na", "1mg", true),
-        NutrientInfo("Zinc, Zn", "0.02mg", true),
-        NutrientInfo("Copper, Cu", "0.033mg", true),
-        NutrientInfo("Manganese, Mn", "0.033mg", true)
+        NutrientInfo("Zinc, Zn", "0.04mg", true),
+        NutrientInfo("Copper, Cu", "0.027mg", true),
+        NutrientInfo("Manganese, Mn", "0.035mg", true)
     )
 
     MaterialTheme {

@@ -30,13 +30,13 @@ class MainViewModel @Inject constructor(
         appEntryUseCases.readAppEntry().onEach { shouldStartFromHomeScreen ->
             if(shouldStartFromHomeScreen){
                 // Verifikasi token
-                val isTokenValid = try {
-                    authRepository.verifyToken().isSuccess
-                } catch (e: Exception) {
-                    false
-                }
-                
-                if (isTokenValid) {
+//                val isTokenValid = try {
+//                    authRepository.verifyToken().isSuccess
+//                } catch (e: Exception) {
+//                    false
+//                }
+
+                if (tokenManager.getToken != null) {
                     _startDestination.value = Route.HomeScreen.route
                 } else {
                     tokenManager.clearToken() // Hapus token tidak valid

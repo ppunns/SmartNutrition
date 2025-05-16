@@ -10,6 +10,7 @@ import com.example.smartnutrition.domain.repository.AuthRepository
 import com.example.smartnutrition.domain.repository.NutritionRepository
 import com.example.smartnutrition.domain.usecases.Nutrition.GetDailyHistoryNutritionUseCase
 import com.example.smartnutrition.domain.usecases.Nutrition.GetDailyNutritionUseCase
+import com.example.smartnutrition.domain.usecases.Nutrition.GetFruitNutritionUseCase
 import com.example.smartnutrition.domain.usecases.Nutrition.GetMonthlyHistoryNutritionUseCase
 import com.example.smartnutrition.domain.usecases.Nutrition.GetMonthlyNutritionUseCase
 import com.example.smartnutrition.domain.usecases.Nutrition.NutritionUseCase
@@ -61,7 +62,8 @@ object NetworkModule {
             getDailyNutritionUseCase = GetDailyNutritionUseCase(nutritionRepository),
             getMonthlyNutritionUseCase = GetMonthlyNutritionUseCase(nutritionRepository),
             getDailyHistoryNutritionUseCase = GetDailyHistoryNutritionUseCase(nutritionRepository),
-            getMonthlyHistoryNutritionUseCase = GetMonthlyHistoryNutritionUseCase(nutritionRepository)
+            getMonthlyHistoryNutritionUseCase = GetMonthlyHistoryNutritionUseCase(nutritionRepository),
+            getFruitNutritionUseCase = GetFruitNutritionUseCase(nutritionRepository)
         )
     }
     @Provides

@@ -6,5 +6,16 @@ data class Data(
     val totalKalori: Int,
     val totalKarbohidrat: Double,
     val totalLemak: Double,
-    val totalProtein: Double
+    val totalProtein: Double,
+//    Data tambahan dari API fruits
+    val energy: Energy,
+    val id: String,
+    val kalori: Int,
+    val karbohidrat: Double,
+    val lemak: Double,
+    val minerals: Minerals,
+    val name: String,
+    val nitrogen: Double,
+    val protein: Double,
+    val water: Double
 )
