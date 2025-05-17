@@ -42,10 +42,10 @@ import com.example.smartnutrition.ui.theme.Blue50
 @Composable
 fun NutritionFullIndicatorCard(
     modifier: Modifier = Modifier,
-    totalKalori: Int,
-    totalKarbohidrat: Int,
-    totalProtein: Int,
-    totalLemak: Int
+    kalori: Int,
+    karbohidrat: Double,
+    protein: Double,
+    lemak: Double
 ) {
     Card(
         modifier = modifier
@@ -69,7 +69,7 @@ fun NutritionFullIndicatorCard(
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 NutritionInfo(
-                    value = totalKalori,
+                    value = kalori,
                     maxValue = 4000,
                     unit = "kcal",
                     label = "Kalori", 
@@ -77,7 +77,7 @@ fun NutritionFullIndicatorCard(
                     modifier = Modifier.weight(1f)
                 )
                 NutritionInfo(
-                    value = totalProtein,
+                    value = protein.toInt(),
                     maxValue = 100,
                     unit = "g",
                     label = "Protein",
@@ -91,7 +91,7 @@ fun NutritionFullIndicatorCard(
                 horizontalArrangement = Arrangement.spacedBy(15.dp)
             ) {
                 NutritionInfo(
-                    value = totalKarbohidrat,
+                    value = karbohidrat.toInt(),
                     maxValue = 100,
                     unit = "g",
                     label = "Karbohidrat",
@@ -99,7 +99,7 @@ fun NutritionFullIndicatorCard(
                     modifier = Modifier.weight(1f) //
                 )
                 NutritionInfo(
-                    value = totalLemak,
+                    value = lemak.toInt(),
                     maxValue = 100,
                     unit = "g",
                     label = "Lemak",
@@ -111,13 +111,13 @@ fun NutritionFullIndicatorCard(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun NutritionIndicatorCardPreview() {
-    NutritionFullIndicatorCard(
-        totalKalori = 582,
-        totalKarbohidrat = 26,
-        totalProtein = 58,
-        totalLemak = 28
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun NutritionIndicatorCardPreview() {
+//    NutritionFullIndicatorCard(
+//        totalKalori = 582,
+//        totalKarbohidrat = 26,
+//        totalProtein = 58,
+//        totalLemak = 28
+//    )
+//}

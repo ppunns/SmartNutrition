@@ -43,7 +43,11 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
-
+    fun updateProteinTarget(target: Int) {
+        viewModelScope.launch {
+            tokenManager.saveProteinTarget(target)
+        }
+    }
     fun logout() {
         viewModelScope.launch {
             tokenManager.clearToken()

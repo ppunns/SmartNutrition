@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.example.smartnutrition.ui.theme.MobileTypography
 
 @Composable
-fun     NutritionInfo(
+fun NutritionInfo(
     value: Int,
     maxValue: Int,
     unit: String,

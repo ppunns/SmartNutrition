@@ -95,7 +95,6 @@ class LoginViewModel @Inject constructor(
                             }
                             else -> "Terjadi kesalahan yang tidak diketahui"
                         }
-                        
                         _state.update {
                             it.copy(
                                 isLoading = false,

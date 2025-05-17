@@ -58,4 +58,13 @@ class TokenManager @Inject constructor(private val context: Context) {
             preferences.clear()
         }
     }
+    suspend fun saveProteinTarget(target: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[PROTEIN_TAR] = target
+        }
+    }
+
+    val getProteinTarget: Flow<Int> = context.dataStore.data.map { preferences ->
+        preferences[PROTEIN_TAR] ?: 0
+    }
 }

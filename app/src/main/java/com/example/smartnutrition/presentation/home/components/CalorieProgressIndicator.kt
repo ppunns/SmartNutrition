@@ -29,14 +29,14 @@ import com.example.smartnutrition.ui.theme.Blue50
 @Composable
 fun CalorieProgressIndicator(
     currentCalories: Int,
-    targetCalories: Int,
+    proteinTarget: Int,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
     val strokeWidth = with(density) { 20.dp.toPx() }
     
-    // Calculate progress percentage
-    val progress = currentCalories.toFloat() / targetCalories
+    // Calculate progress percentage with safety check
+    val progress = if (proteinTarget > 0) currentCalories.toFloat() / proteinTarget else 0f
 
     // Single animation state for both progress and value
     val animatedProgress = remember { Animatable(0f) }
@@ -53,7 +53,7 @@ fun CalorieProgressIndicator(
     }
 
     // Calculate the animated calorie value
-    val animatedCalories = (animatedProgress.value * targetCalories).toInt()
+    val animatedCalories = (animatedProgress.value * proteinTarget).toInt()
 
     Card(
         modifier = modifier
@@ -61,7 +61,7 @@ fun CalorieProgressIndicator(
             .height(251.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Blue50
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
@@ -128,7 +128,7 @@ fun CalorieProgressIndicator(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "Of $targetCalories kcal",
+                    text = "Of $proteinTarget kcal",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
@@ -159,7 +159,7 @@ fun CalorieTrackerScreen() {
         ) {
             CalorieProgressIndicator(
                 currentCalories = currentCalories,
-                targetCalories = targetCalories
+                proteinTarget = targetCalories
             )
         }
     }

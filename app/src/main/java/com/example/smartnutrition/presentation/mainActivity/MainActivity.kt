@@ -47,21 +47,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         
-        // Periksa dan minta izin kamera
-//        checkCameraPermission()
-        
         installSplashScreen().apply {
             setKeepOnScreenCondition(condition = { viewModel.splashCondition.value })
         }
         setContent {
             SmartNutritionTheme(dynamicColor = false) {
-                val isSystemInDarkMode = isSystemInDarkTheme()
                 val systemUiColor = rememberSystemUiController()
-
+    
                 SideEffect {
                     systemUiColor.setSystemBarsColor(
                         color = Color.Transparent,
-                        darkIcons = !isSystemInDarkMode
+                        darkIcons = true // Selalu menggunakan ikon gelap karena tema selalu terang
                     )
                 }
                 Box(

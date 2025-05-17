@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartnutrition.R
+import com.example.smartnutrition.ui.theme.Blue500
 import com.example.smartnutrition.ui.theme.MobileTypography
 
 @Composable
@@ -41,7 +43,7 @@ fun SmartNutritionTopBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .border(
                 width = 0.5.dp,
                 color = Color(0xFF006FFD).copy(alpha = 0.1f)

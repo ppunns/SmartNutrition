@@ -25,8 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CameraViewModel @Inject constructor(
-    private val classifyFruitUseCase: ClassifyFruitUseCase,
-    private val nutritionUseCase: NutritionUseCase
+    private val classifyFruitUseCase: ClassifyFruitUseCase
 ) : ViewModel() {
 
 
@@ -45,21 +44,26 @@ class CameraViewModel @Inject constructor(
                                 isLoading = false,
                                 capturedImage = bitmap,
                                 classification = classification,
-                                error = null
+                                error = null,
+                                shouldNavigateToDetail = true
                             )
                         }
-                        // Setelah klasifikasi berhasil, ambil detail buah
                     },
                     onFailure = { exception ->
                         _state.update {
                             it.copy(
                                 isLoading = false,
-                                error = exception.message
+                                error = exception.message,
+                                shouldNavigateToDetail = false
                             )
                         }
                     }
                 )
             }
         }
+    }
+
+    fun resetNavigation() {
+        _state.update { it.copy(shouldNavigateToDetail = false) }
     }
 }

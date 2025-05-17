@@ -8,8 +8,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -18,10 +20,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,10 +42,24 @@ import com.example.smartnutrition.ui.theme.MobileTypography
 @Composable
 fun DetailNutritionScreen(
     viewModel: DetailNutritionViewModel = hiltViewModel(),
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    label: String,
+    navigateToHome: () -> Unit // Tambahkan parameter untuk navigasi ke home
 ) {
-
     val state by viewModel.state.collectAsState()
+    
+    // Tambahkan LaunchedEffect untuk memantau status addSuccess
+    LaunchedEffect(state.addSuccess) {
+        if (state.addSuccess) {
+            // Jika berhasil menambahkan data, navigasi ke home
+            navigateToHome()
+        }
+    }
+    
+    // Tambahkan LaunchedEffect untuk memanggil getNutritionByLabel
+    LaunchedEffect(key1 = true) {
+        viewModel.getNutritionByLabel(label)
+    }
     val sampleNutrients = listOf(
         NutrientInfo("Water", "${state.nutritionData?.data?.water}g"),
         NutrientInfo("Energy (Atwater General Factors)", "${state.nutritionData?.data?.energy?.atwater}kcal"),
@@ -89,37 +108,59 @@ fun DetailNutritionScreen(
                 )
             )
         },
-    ){ paddingValues ->
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.addNutrition(
+                        userId = state.id.toString(),
+                        fruitLabel = label,
+                        quantity = 1
+                    )
+                },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = Color.White
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Tambah Data"
+                )
+            }
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally // Tambahkan ini untuk center alignment
         ) {
+            Text(
+                text = state.nutritionData?.data?.name.toString(),
+                style = MobileTypography.headlineLarge.copy(fontSize = 32.sp),
+                modifier = Modifier.padding(bottom = 16.dp),
+                textAlign = TextAlign.Center // Tambahkan ini untuk center text
+            )
+            Text(
+                text = "Informasi Nutrisi",
+                style = MobileTypography.labelSmall,
+                modifier = Modifier.padding(bottom = 16.dp),
+                textAlign = TextAlign.Center // Tambahkan ini untuk center text
+            )
             state.nutritionData?.data?.let {
-                Text(
-                    text = it.name,
-                    style = MobileTypography.headlineLarge.copy(fontSize = 32.sp),
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-                Text(
-                    text = "Informasi Nutrisi",
-                    style = MobileTypography.labelSmall,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
                 NutritionFullIndicatorCard(
-                    totalKalori = it.totalKalori,
-                    totalKarbohidrat = it.totalKarbohidrat.toInt(),
-                    totalProtein = it.totalProtein.toInt(),
-                    totalLemak = it.totalLemak.toInt(),
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-                NutritionFactsCard(
-                    nutrients = sampleNutrients,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    kalori = it.kalori,
+                    karbohidrat = it.karbohidrat,
+                    protein = it.protein,
+                    lemak = it.lemak
                 )
             }
+            NutritionFactsCard(
+                nutrients = sampleNutrients,
+                modifier = Modifier.fillMaxWidth()
+            )
+
         }
     }
 

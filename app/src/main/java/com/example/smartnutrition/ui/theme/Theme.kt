@@ -24,24 +24,21 @@ private val LightColorScheme = lightColorScheme(
     background = Color.White,
     primary = Blue,
     error = DarkRed,
-    surface = Color.White
+    surface = Blue50
 )
 
 @Composable
 fun SmartNutritionTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
+    darkTheme: Boolean = false, // Mengabaikan isSystemInDarkTheme()
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            dynamicLightColorScheme(context) // Selalu menggunakan tema terang
         }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> LightColorScheme // Selalu menggunakan tema terang
     }
 
     MaterialTheme(

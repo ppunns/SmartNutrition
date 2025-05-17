@@ -150,6 +150,7 @@ fun HomeScreen(
 
 @Composable
 fun DailyView(viewModel: HomeViewModel) {
+    val proteinTarget by viewModel.proteinTarget.collectAsState()
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
@@ -159,7 +160,7 @@ fun DailyView(viewModel: HomeViewModel) {
         item {
             CalorieProgressIndicator(
                 currentCalories = viewModel.historyState.value.data?.data?.totalKalori?:0,
-                targetCalories = 4000
+                proteinTarget = proteinTarget ,
             )
         }
 
@@ -175,7 +176,8 @@ fun DailyView(viewModel: HomeViewModel) {
             Text(
                 text = "Riwayat Makanan",
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.SemiBold,
             )
         }
 

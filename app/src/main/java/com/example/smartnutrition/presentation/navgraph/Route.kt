@@ -15,7 +15,9 @@ sealed class Route(
     object HomeScreen: Route(route = "homeScreen")
     object ProfileScreen: Route(route = "profileScreen")
     object CameraScanning : Route("camera_scanning")
-    object DetailsScreen : Route( route = "details_screen")
+    object DetailsScreen : Route("details_screen/{label}") {
+        fun createRoute(label: String) = "details_screen/$label"
+    }
     object AppStartNavigation : Route(route = "appStartNavigation")
     object NewsNavigation : Route(route = "newsNavigation")
 }

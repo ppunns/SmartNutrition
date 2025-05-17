@@ -4,14 +4,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.smartnutrition.data.remote.dto.NutritionResponse
 import com.example.smartnutrition.presentation.camera.CameraScreen
 import com.example.smartnutrition.presentation.common.SharedViewModel
 import com.example.smartnutrition.presentation.detailNutrition.DetailNutritionScreen
+import com.example.smartnutrition.presentation.detailNutrition.DetailNutritionViewModel
 import com.example.smartnutrition.presentation.home.HomeScreen
 import com.example.smartnutrition.presentation.home.HomeViewModel
 import com.example.smartnutrition.presentation.login.LoginScreen
@@ -80,14 +83,24 @@ fun NavGraph(
             )
         }
 
-        composable(route = Route.DetailsScreen.route) {
-            val nutritionData = navController.previousBackStackEntry?.savedStateHandle?.get<NutritionResponse>("nutritionData")
-            nutritionData?.let { data ->
-                DetailNutritionScreen(
-                    nutritionData = data,
-                    onNavigateBack = { navController.navigateUp() }
-                )
-            }
+        composable(
+            route = Route.DetailsScreen.route,
+            arguments = listOf(
+                navArgument("label") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val label = backStackEntry.arguments?.getString("label") ?: ""
+            DetailNutritionScreen(
+                onNavigateBack = { navController.popBackStack() },
+                label = label,
+                navigateToHome = {
+                    navController.navigate(Route.HomeScreen.route) {
+                        popUpTo(Route.HomeScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
     }
 }

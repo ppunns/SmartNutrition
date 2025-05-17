@@ -1,5 +1,6 @@
 package com.example.smartnutrition.data.remote
 
+import com.example.smartnutrition.data.model.AddNutritionRequest
 import com.example.smartnutrition.data.model.FruitRequest
 import com.example.smartnutrition.data.model.LoginRequest
 import com.example.smartnutrition.data.remote.dto.LoginResponse
@@ -37,4 +38,6 @@ interface NutrisionAPI {
     ): Response<NutritionResponse>
     @POST("api/fruit")
     suspend fun getFruitDetail(@Body request: FruitRequest):NutritionResponse
+    @POST("api/consumption")
+    suspend fun addNutrition(@Body request: AddNutritionRequest): Response<NutritionResponse>
 }

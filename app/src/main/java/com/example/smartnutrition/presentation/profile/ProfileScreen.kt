@@ -37,8 +37,6 @@ fun ProfileScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-
-//    Test Component Baru
     var showBottomSheet by remember { mutableStateOf(false) }
     var karbohidratValue by remember { mutableStateOf(state.proteinTarget.toString()) }
 
@@ -46,7 +44,7 @@ fun ProfileScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White,
+                    containerColor = MaterialTheme.colorScheme.background,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
@@ -66,7 +64,7 @@ fun ProfileScreen(
                 },
                 modifier = Modifier.border(
                     width = 0.5.dp,
-                    color = Color.LightGray.copy(alpha = 0.5f)
+                    color = Color(0xFF006FFD).copy(alpha = 0.1f)
                 )
             )
         },
@@ -120,23 +118,22 @@ fun ProfileScreen(
                 title = "Protein",
                 subtitle = "Pantau dan Capai Target Anda Setiap Hari",
                 onClick = {
-//                    showInputKalori = true
                     showBottomSheet = true
                 }
             )
-            ProfileMenuItem(
-                icon = AppIcons.bulan,
-                title = "Mode Gelap",
-                subtitle = "Aktifkan Tema Gelap",
-                hasSwitch = true,
-                onSwitchChange = { viewModel.toggleDarkMode() }
-            )
-            ProfileMenuItem(
-                icon = AppIcons.bumi,
-                title = "Bahasa",
-                subtitle = "Pilih bahasa",
-                onClick = { /* Handle click */ }
-            )
+//            ProfileMenuItem(
+//                icon = AppIcons.bulan,
+//                title = "Mode Gelap",
+//                subtitle = "Aktifkan Tema Gelap",
+//                hasSwitch = true,
+//                onSwitchChange = { viewModel.toggleDarkMode() }
+//            )
+//            ProfileMenuItem(
+//                icon = AppIcons.bumi,
+//                title = "Bahasa",
+//                subtitle = "Pilih bahasa",
+//                onClick = { /* Handle click */ }
+//            )
 
             Spacer(modifier = Modifier.weight(1f))
             // Logout Button
@@ -162,10 +159,12 @@ fun ProfileScreen(
                 NutritionInputBottomSheet(
                     title = "Protein",
                     subtitle = "Pantau dan Capai Target Anda Setiap Hari",
-                    label = "Karbohidrat",
+                    label = "Target Protein",
                     initialValue = karbohidratValue,
                     onSave = { newValue ->
                         karbohidratValue = newValue
+                        viewModel.updateProteinTarget(newValue.toIntOrNull() ?: 0)
+                        showBottomSheet = false
                     },
                     onDismiss = { showBottomSheet = false }
                 )

@@ -5,12 +5,10 @@ import com.example.smartnutrition.domain.repository.NutritionRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-
-
-class GetFruitNutritionUseCase @Inject constructor(
+class AddNutritionUseCase @Inject constructor(
     private val repository: NutritionRepository
 ) {
-    suspend operator fun invoke(label: String): Flow<Result<NutritionResponse>> {
-        return repository.getNutritionByLabel(label = label)
+    suspend operator fun invoke(userId: String, fruitLabel: String, quantity: Int):Flow<Result<NutritionResponse>>{
+        return repository.addNutrition(userId,fruitLabel,quantity)
     }
 }

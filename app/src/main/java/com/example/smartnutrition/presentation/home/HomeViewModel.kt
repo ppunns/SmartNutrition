@@ -9,7 +9,10 @@ import com.example.smartnutrition.domain.usecases.Nutrition.NutritionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,8 +25,18 @@ class HomeViewModel @Inject constructor(
     private val _historyState = mutableStateOf(HomeState())
     val historyState: State<HomeState> = _historyState
 
+    // Pindahkan deklarasi proteinTarget ke bagian atas setelah state
+    private val _proteinTarget = MutableStateFlow(0)
+    val proteinTarget = _proteinTarget.asStateFlow()
+
     init {
         fetchDailyNutrition()
+        // Tambahkan inisialisasi protein target
+        viewModelScope.launch {
+            tokenManager.getProteinTarget.collect { target ->
+                _proteinTarget.value = target
+            }
+        }
     }
 
     private suspend fun <T> safeApiCall(
@@ -56,9 +69,9 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchDailyNutrition() {
         viewModelScope.launch {
-//            val userId = tokenManager.getUserId() ?: return@launch
+            val userId = tokenManager.getUserData.first().id.toString()
             safeApiCall(
-                apiCall = { nutritionUseCase.getDailyNutritionUseCase("user1245") },
+                apiCall = { nutritionUseCase.getDailyNutritionUseCase(userId) },
                 onSuccess = { response ->
                     _historyState.value = historyState.value.copy(data = response)
                 }
@@ -68,9 +81,9 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchMonthlyNutrition() {
         viewModelScope.launch {
-//            val userId = tokenManager.getUserId() ?: return@launch
+            val userId = tokenManager.getUserData.first().id.toString()
             safeApiCall(
-                apiCall = { nutritionUseCase.getMonthlyNutritionUseCase("user1245") },
+                apiCall = { nutritionUseCase.getMonthlyNutritionUseCase(userId) },
                 onSuccess = { response ->
                     _historyState.value = historyState.value.copy(data = response)
                 }

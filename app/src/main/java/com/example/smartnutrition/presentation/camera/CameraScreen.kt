@@ -70,11 +70,17 @@ fun CameraScreen(
     viewModel: CameraViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    LaunchedEffect(state.classification) {
-        state.classification?.let { result ->
-            Log.d("CameraScreen", "Classification result: ${result.className}")
+    
+    LaunchedEffect(state.shouldNavigateToDetail) {
+        if (state.shouldNavigateToDetail) {
+            state.classification?.className?.let { label ->
+                Log.e("data ini adalah :",label)
+                navigate(Route.DetailsScreen.createRoute(label))
+            }
+            viewModel.resetNavigation()
         }
     }
+
     Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             CameraContent(

@@ -70,6 +70,9 @@ class RegisterViewModel @Inject constructor(
                 ).onSuccess { response ->
                     // Save token after successful registration
                     tokenManager.saveToken(response.token)
+                    tokenManager.saveUserData(
+                        user = response.user
+                    )
                     _state.update {
                         it.copy(
                             isSuccess = true,

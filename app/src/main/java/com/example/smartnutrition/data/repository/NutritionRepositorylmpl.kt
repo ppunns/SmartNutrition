@@ -1,12 +1,9 @@
 package com.example.smartnutrition.data.repository
 
-import android.util.Log
+import com.example.smartnutrition.data.model.AddNutritionRequest
 import com.example.smartnutrition.data.model.FruitRequest
-import com.example.smartnutrition.data.model.LoginRequest
 import com.example.smartnutrition.data.remote.NutrisionAPI
-import com.example.smartnutrition.data.remote.dto.LoginResponse
 import com.example.smartnutrition.data.remote.dto.NutritionResponse
-import com.example.smartnutrition.data.remote.dto.toDomain
 import com.example.smartnutrition.domain.repository.NutritionRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -65,9 +62,34 @@ class NutritionRepositorylmpl @Inject constructor(
             emit(Result.failure(e))
         }
     }
-    override suspend fun getNutritionByLabel(label: String): NutritionResponse {
-        val response = api.getFruitDetail(FruitRequest(label = label))
-        return response.data.toDomain()
+    override suspend fun getNutritionByLabel(label: String): Flow<Result<NutritionResponse>> = flow {
+        try {
+            val response = api.getFruitDetail(FruitRequest(label = label))
+            if (response.data != null) {
+                emit(Result.success(response)) // Return the entire response, not just response.data
+            } else {
+                emit(Result.failure(Exception("Data nutrisi tidak ditemukan")))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
     }
 
+    override suspend fun addNutrition(userId: String, fruitLabel: String, quantity: Int): Flow<Result<NutritionResponse>> = flow {
+        try {
+            val request = api.addNutrition(AddNutritionRequest(
+                fruitLabel = fruitLabel,
+                quantity = quantity,
+                userId = userId
+            ))
+//            val response = api.addNutrition(request)
+            if (request.isSuccessful) {
+                emit(Result.success(request.body()!!))
+            } else {
+                emit(Result.failure(Exception("Gagal menambahkan data nutrisi")))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
 }

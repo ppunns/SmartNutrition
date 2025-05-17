@@ -9,6 +9,6 @@ data class CameraState(
     val capturedImage: Bitmap? = null,
     val isLoading: Boolean = false,
     val classification: FruitClassificationResult? = null,
-    val fruitData: Data? = null,
-    val error: String? = null
+    val error: String? = null,
+    val shouldNavigateToDetail: Boolean = false
 )
