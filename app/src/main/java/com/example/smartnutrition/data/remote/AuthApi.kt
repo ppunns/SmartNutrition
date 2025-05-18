@@ -12,6 +12,6 @@ interface AuthApi {
     suspend fun login(@Body request: LoginRequest):LoginResponse
     @POST("register")
     suspend fun register(@Body request: RegisterRequest): RegisterResponse
-    @GET("me")
+    @GET("verify-token")
     suspend fun verifyToken(@Header("Authorization") token: String): User
 }

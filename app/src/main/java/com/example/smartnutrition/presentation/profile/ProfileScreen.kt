@@ -39,6 +39,9 @@ fun ProfileScreen(
 
     var showBottomSheet by remember { mutableStateOf(false) }
     var karbohidratValue by remember { mutableStateOf(state.proteinTarget.toString()) }
+    val proteinTarget by viewModel.proteinTarget.collectAsState()
+
+
 
     Scaffold(
         topBar = {
@@ -121,20 +124,6 @@ fun ProfileScreen(
                     showBottomSheet = true
                 }
             )
-//            ProfileMenuItem(
-//                icon = AppIcons.bulan,
-//                title = "Mode Gelap",
-//                subtitle = "Aktifkan Tema Gelap",
-//                hasSwitch = true,
-//                onSwitchChange = { viewModel.toggleDarkMode() }
-//            )
-//            ProfileMenuItem(
-//                icon = AppIcons.bumi,
-//                title = "Bahasa",
-//                subtitle = "Pilih bahasa",
-//                onClick = { /* Handle click */ }
-//            )
-
             Spacer(modifier = Modifier.weight(1f))
             // Logout Button
             Button(
@@ -160,7 +149,7 @@ fun ProfileScreen(
                     title = "Protein",
                     subtitle = "Pantau dan Capai Target Anda Setiap Hari",
                     label = "Target Protein",
-                    initialValue = karbohidratValue,
+                    initialValue = proteinTarget.toString(),
                     onSave = { newValue ->
                         karbohidratValue = newValue
                         viewModel.updateProteinTarget(newValue.toIntOrNull() ?: 0)

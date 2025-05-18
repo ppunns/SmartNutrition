@@ -7,10 +7,13 @@ import com.example.smartnutrition.domain.manger.LocalUserManger
 import com.example.smartnutrition.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -21,8 +24,15 @@ class ProfileViewModel @Inject constructor(
     fun toggleDarkMode() {
         _state.update { it.copy(isDarkMode = !it.isDarkMode) }
     }
+    private val _proteinTarget = MutableStateFlow(0)
+    val proteinTarget = _proteinTarget.asStateFlow()
     init {
         loadUserData()
+        viewModelScope.launch {
+            tokenManager.getProteinTarget.collect { target ->
+                _proteinTarget.value = target
+            }
+        }
     }
 
     private fun loadUserData() {
@@ -48,6 +58,7 @@ class ProfileViewModel @Inject constructor(
             tokenManager.saveProteinTarget(target)
         }
     }
+
     fun logout() {
         viewModelScope.launch {
             tokenManager.clearToken()

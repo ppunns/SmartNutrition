@@ -36,7 +36,10 @@ fun CalorieProgressIndicator(
     val strokeWidth = with(density) { 20.dp.toPx() }
     
     // Calculate progress percentage with safety check
-    val progress = if (proteinTarget > 0) currentCalories.toFloat() / proteinTarget else 0f
+    val progress = if (proteinTarget > 0) {
+        // Batasi progress maksimal ke 1.0f (100%)
+        minOf(currentCalories.toFloat() / proteinTarget, 1.0f)
+    } else 0f
 
     // Single animation state for both progress and value
     val animatedProgress = remember { Animatable(0f) }
@@ -46,7 +49,7 @@ fun CalorieProgressIndicator(
         animatedProgress.animateTo(
             targetValue = progress,
             animationSpec = tween(
-                durationMillis = 800, // Kurangi durasi animasi dari 1500ms menjadi 800ms
+                durationMillis = 400, // Kurangi durasi animasi dari 1500ms menjadi 800ms
                 easing = FastOutSlowInEasing
             )
         )
@@ -88,7 +91,7 @@ fun CalorieProgressIndicator(
                 val startAngle = 150f
                 val sweepAngle = 240f
 
-                // Background arc
+                //  
                 drawArc(
                     color = Color(0xFFDCE6FF),
                     startAngle = startAngle,

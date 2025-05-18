@@ -10,6 +10,7 @@ import com.example.smartnutrition.domain.usecases.app_entry.AppEntryUseCases
 import com.example.smartnutrition.presentation.navgraph.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -29,17 +30,10 @@ class MainViewModel @Inject constructor(
     init {
         appEntryUseCases.readAppEntry().onEach { shouldStartFromHomeScreen ->
             if(shouldStartFromHomeScreen){
-                // Verifikasi token
-//                val isTokenValid = try {
-//                    authRepository.verifyToken().isSuccess
-//                } catch (e: Exception) {
-//                    false
-//                }
-
-                if (tokenManager.getToken != null) {
+                val token = tokenManager.getToken.first()
+                if (!token.isNullOrEmpty()) {
                     _startDestination.value = Route.HomeScreen.route
                 } else {
-                    tokenManager.clearToken() // Hapus token tidak valid
                     _startDestination.value = Route.LoginScreen.route
                 }
             } else {

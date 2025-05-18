@@ -15,7 +15,7 @@ import javax.inject.Inject
 class TokenManager @Inject constructor(private val context: Context) {
     companion object {
         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("user_preferences")
-        private val TOKEN_KEY = stringPreferencesKey("jwt_token")
+        private val TOKEN_KEY = stringPreferencesKey("auth_token")
         private val USER_ID = intPreferencesKey("userId")
         private val USERNAME_KEY = stringPreferencesKey("username")
         private val EMAIL_KEY = stringPreferencesKey("email")
@@ -40,7 +40,7 @@ class TokenManager @Inject constructor(private val context: Context) {
     }
 
     val getToken: Flow<String?> = context.dataStore.data.map { preferences ->
-        preferences[TOKEN_KEY]
+        preferences[TOKEN_KEY] ?: null
     }
 
     val getUserData: Flow<User> = context.dataStore.data.map { preferences ->
