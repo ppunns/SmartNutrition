@@ -1,5 +1,6 @@
 package com.example.smartnutrition.presentation.profile
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartnutrition.data.remote.dto.User
 import com.example.smartnutrition.presentation.common.NutritionInputBottomSheet
@@ -27,6 +29,8 @@ import com.example.smartnutrition.presentation.navgraph.Route
 import com.example.smartnutrition.presentation.profile.components.ProfileAvatar
 import com.example.smartnutrition.presentation.profile.components.ProfileMenuItem
 import com.example.smartnutrition.ui.icons.AppIcons
+import com.example.smartnutrition.ui.theme.Blue500
+import com.example.smartnutrition.ui.theme.MobileTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +44,7 @@ fun ProfileScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
     var karbohidratValue by remember { mutableStateOf(state.proteinTarget.toString()) }
     val proteinTarget by viewModel.proteinTarget.collectAsState()
+    var showLogoutDialog by remember { mutableStateOf(false) }
 
 
 
@@ -47,12 +52,12 @@ fun ProfileScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color.White,
                 ),
                 title = {
                     Text(
                         "Profile",
+                        style = MobileTypography.titleLarge,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -67,7 +72,7 @@ fun ProfileScreen(
                 },
                 modifier = Modifier.border(
                     width = 0.5.dp,
-                    color = Color(0xFF006FFD).copy(alpha = 0.1f)
+                    color = Color.LightGray.copy(alpha = 0.5f)
                 )
             )
         },
@@ -87,8 +92,7 @@ fun ProfileScreen(
             ) {
                 ProfileAvatar(
                     photoUrl = state.profilePicture,
-                    username = "Kaspun",
-                    onEditClick = {}
+                    username = "Kaspun"
                 )
             }
 
@@ -127,10 +131,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.weight(1f))
             // Logout Button
             Button(
-                onClick = {
-                    viewModel.logout()
-                    onNavigateToLogin()
-                },
+                onClick = { showLogoutDialog = true },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 24.dp)
@@ -141,6 +142,79 @@ fun ProfileScreen(
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text("Keluar", color = Color.White)
+            }
+
+            if (showLogoutDialog) {
+                AlertDialog(
+                    onDismissRequest = { showLogoutDialog = false },
+                    containerColor = Color.White,
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f),
+                    shape = RoundedCornerShape(12.dp),
+                    properties = DialogProperties(
+                        dismissOnBackPress = true,
+                        dismissOnClickOutside = true,
+                        usePlatformDefaultWidth = false
+                    ),
+                    title = {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Keluar",
+                                style = MobileTypography.headlineSmall,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                        }
+                    },
+                    text = {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Apakah Anda yakin ingin keluar dari aplikasi?",
+                                style = MobileTypography.labelLarge,
+                                color = Color.Gray,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                        }
+                    },
+                    confirmButton = {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            OutlinedButton(
+                                onClick = { showLogoutDialog = false },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(45.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                border = BorderStroke(1.dp, Blue500)
+                            ) {
+                                Text("Tidak", color = Blue500)
+                            }
+                            Button(
+                                onClick = {
+                                    viewModel.logout()
+                                    onNavigateToLogin()
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Blue500
+                                ),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(45.dp),
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Text("Ya", color = Color.White)
+                            }
+                        }
+                    },
+                    dismissButton = null
+                )
             }
 
 //            Logika Show ButtonSHeet

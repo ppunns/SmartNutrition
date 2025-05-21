@@ -1,5 +1,6 @@
 package com.example.smartnutrition.presentation.home
 
+import android.content.Intent
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

@@ -63,7 +63,7 @@ fun LoginScreen(
     val state by viewModel.state.collectAsState()
     val snackbarMessage by viewModel.snackbarMessage.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    
+
     // Effect untuk menampilkan snackbar message
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let {
@@ -184,15 +184,15 @@ fun LoginScreen(
                         onValueChange = { password = it }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Lupa password?",
-                        modifier = Modifier
-                            .align(Alignment.Start)
-                            .padding(top = 8.dp)
-                            .clickable { /* Handle forgot password */ },
-                        style = MobileTypography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+//                    Text(
+//                        text = "Lupa password?",
+//                        modifier = Modifier
+//                            .align(Alignment.Start)
+//                            .padding(top = 8.dp)
+//                            .clickable { /* Handle forgot password */ },
+//                        style = MobileTypography.labelSmall,
+//                        color = MaterialTheme.colorScheme.primary
+//                    )
                 }
             }
 
@@ -287,7 +287,7 @@ fun LoginScreen(
             snackbar = { snackbarData ->
                 Snackbar(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    containerColor = if (snackbarMessage?.contains("gagal") == true) 
+                    containerColor = if (snackbarMessage?.contains("salah") == true)
                         Color.Red 
                     else MaterialTheme.colorScheme.primary,
                     contentColor = Color.White

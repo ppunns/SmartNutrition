@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.example.smartnutrition.data.model.FruitClassificationResult
 import com.example.smartnutrition.domain.repository.FruitClassificationRepository
-import com.example.smartnutrition.ml.Models
+import com.example.smartnutrition.ml.Modeldeteksibuah
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.tensorflow.lite.DataType
@@ -19,12 +19,12 @@ class FruitClassificationRepositoryImpl @Inject constructor(
 
     override suspend fun classifyImage(bitmap: Bitmap): Flow<Result<FruitClassificationResult>> = flow {
         try {
-            val model = Models.newInstance(context)
-            val imageSize = 32
+            val model = Modeldeteksibuah.newInstance(context)
+            val imageSize = 224
 
             // Preprocess image
             val scaledBitmap = Bitmap.createScaledBitmap(bitmap, imageSize, imageSize, false)
-            val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 32, 32, 3), DataType.FLOAT32)
+            val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
             val byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3)
             byteBuffer.order(ByteOrder.nativeOrder())
 
@@ -56,7 +56,7 @@ class FruitClassificationRepositoryImpl @Inject constructor(
                 }
             }
             val classes = listOf(
-                "Apple braeburn", "Wortel", "Timun", "Terong Panjang", "Pir"
+                "alpukat", "apel fuji", "buah naga", "jeruk mandarin","nanas","non-buah", "pir", "pisang", "salak", "timun"
             )
             val result = if (maxPos < classes.size) {
                 FruitClassificationResult(classes[maxPos], maxConfidence)

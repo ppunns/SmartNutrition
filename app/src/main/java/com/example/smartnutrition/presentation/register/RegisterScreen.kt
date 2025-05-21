@@ -60,13 +60,16 @@ fun RegisterScreen(
     }
 
     val state by viewModel.state.collectAsState()
-    LaunchedEffect(state.isSuccess) {
-        if (state.isSuccess) {
-            navController.navigate(Route.HomeScreen.route) {
-                popUpTo(Route.RegisterScreen.route) { inclusive = true }
-            }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarMessage by viewModel.snackbarMessage.collectAsState()
+
+    LaunchedEffect(snackbarMessage) {
+        snackbarMessage?.let {
+            snackbarHostState.showSnackbar(message = it)
+            viewModel.clearSnackbarMessage()
         }
     }
+
     Box(modifier = Modifier.fillMaxSize()) {
         // Background element
         BlueCircleElement(
@@ -192,12 +195,12 @@ fun RegisterScreen(
                         onValueChange = viewModel::onConfirmPasswordChange
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    TermsAndConditionsCheckbox(
-                                isChecked = checked,
-                                onCheckedChange = { checked = it },
-                                onTermsClicked = { /* Open Terms and Conditions */ },
-                                onPrivacyPolicyClicked = { /* Open Privacy Policy */ }
-                    )
+//                    TermsAndConditionsCheckbox(
+//                                isChecked = checked,
+//                                onCheckedChange = { checked = it },
+//                                onTermsClicked = { /* Open Terms and Conditions */ },
+//                                onPrivacyPolicyClicked = { /* Open Privacy Policy */ }
+//                    )
                 }
             }
 
@@ -210,7 +213,12 @@ fun RegisterScreen(
                 ) + fadeIn(animationSpec = tween(durationMillis = 300))
             ){
                 PrimaryButton(
-                    onClick = { viewModel.register() },
+                    onClick = {
+                        if (state.username.isBlank() || state.password.isBlank() || state.password.isBlank()){
+                            viewModel.showMessage("Silakan isi username,email dan password terlebih dahulu.")
+                        }else{
+                            viewModel.register()
+                        } },
                     text = "Daftar",)
 
             }
@@ -272,6 +280,25 @@ fun RegisterScreen(
                 }
             }
         }
+        // Tambahkan SnackbarHost di akhir Box
+        // Snackbar host
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp),
+            snackbar = { snackbarData ->
+                Snackbar(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    containerColor = if (snackbarMessage?.contains("gagal") == true)
+                        Color.Red
+                    else MaterialTheme.colorScheme.primary,
+                    contentColor = Color.White
+                ) {
+                    Text(text = snackbarData.visuals.message)
+                }
+            }
+        )
     }
 }
 

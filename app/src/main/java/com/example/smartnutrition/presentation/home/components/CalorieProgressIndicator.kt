@@ -91,7 +91,7 @@ fun CalorieProgressIndicator(
                 val startAngle = 150f
                 val sweepAngle = 240f
 
-                //  
+                //
                 drawArc(
                     color = Color(0xFFDCE6FF),
                     startAngle = startAngle,

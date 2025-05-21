@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartnutrition.R
+import com.example.smartnutrition.ui.theme.Blue50
 import com.example.smartnutrition.ui.theme.Blue500
 import com.example.smartnutrition.ui.theme.MobileTypography
 
@@ -90,14 +92,14 @@ fun SmartNutritionTopBar(
                 modifier = Modifier
                     .size(30.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFD5E7FB)) // Light blue background
-                    .clickable { onProfileClick() } // Tambahkan clickable modifier
+                    .background(Blue50)
+                    .clickable { onProfileClick() }
             ) {
-                // You can replace this with an actual user profile image if available
-                Image(
+                Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "User Profile",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(30.dp),
+                    tint = Color(0xFF2E86FB)
                 )
             }
         }

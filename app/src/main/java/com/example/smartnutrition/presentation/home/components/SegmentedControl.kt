@@ -51,7 +51,7 @@ import com.example.smartnutrition.ui.theme.Blue500
 fun SegmentedControl(
     modifier: Modifier = Modifier,
     items: List<String> = listOf("Harian", "Bulanan"),
-    selectedIndex: Int = 0,  // Tambahkan parameter ini
+    selectedIndex: Int = 0,
     onItemSelected: (Int) -> Unit = {}
 ) {
     Card(
@@ -64,10 +64,7 @@ fun SegmentedControl(
             ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
+            containerColor = Blue50
         )
     ) {
         Row(

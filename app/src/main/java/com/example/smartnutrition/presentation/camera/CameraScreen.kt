@@ -1,8 +1,12 @@
 package com.example.smartnutrition.presentation.camera
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.net.Uri
+import android.provider.Settings
 import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
@@ -11,18 +15,29 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -53,35 +68,145 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.compose.rememberNavController
 import com.example.smartnutrition.presentation.navgraph.Route
+import com.example.smartnutrition.ui.theme.Blue500
+import com.example.smartnutrition.ui.theme.MobileTypography
 import com.example.smartnutrition.ui.theme.SmartNutritionTheme
 import com.example.smartnutrition.util.rotateBitmap
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.delay
 import java.util.concurrent.Executor
-
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraScreen(
     navigate: (String) -> Unit,
     viewModel: CameraViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
     
-    LaunchedEffect(state.shouldNavigateToDetail) {
-        if (state.shouldNavigateToDetail) {
-            state.classification?.className?.let { label ->
-                Log.e("data ini adalah :",label)
-                navigate(Route.DetailsScreen.createRoute(label))
+    var showPermissionDialog by remember { mutableStateOf(false) }
+    val cameraPermissionState = rememberPermissionState(
+        Manifest.permission.CAMERA,
+        onPermissionResult = { isGranted ->
+            if (!isGranted) {
+                showPermissionDialog = true
             }
-            viewModel.resetNavigation()
+        }
+    )
+    if (showPermissionDialog) {
+        AlertDialog(
+            onDismissRequest = { showPermissionDialog = false },
+            containerColor = androidx.compose.ui.graphics.Color.White,
+            shape = RoundedCornerShape(12.dp),
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false // Menonaktifkan lebar default platform
+            ),
+            modifier = Modifier
+                .fillMaxWidth(0.85f),
+            title = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Izin Kamera",
+                        style = MobileTypography.headlineSmall,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                }
+            },
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Aplikasi membutuhkan akses kamera untuk memindai makanan. Silakan aktifkan izin kamera di pengaturan untuk menggunakan fitur ini.",
+                        style = MobileTypography.labelLarge,
+                        color = androidx.compose.ui.graphics.Color.Gray,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            },
+            confirmButton = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = {
+                            showPermissionDialog = false
+                            navigate(Route.HomeScreen.route)
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(45.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        border = BorderStroke(1.dp, Blue500)
+                    ) {
+                        Text("Kembali", color = Blue500)
+                    }
+                    Button(
+                        onClick = {
+                            showPermissionDialog = false
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                data = Uri.fromParts("package", context.packageName, null)
+                            }
+                            context.startActivity(intent)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Blue500
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(45.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("Pengaturan", color = androidx.compose.ui.graphics.Color.White)
+                    }
+                }
+            },
+            dismissButton = null
+        )
+    }
+    LaunchedEffect(Unit) {
+        if (!cameraPermissionState.status.isGranted) {
+            cameraPermissionState.launchPermissionRequest()
         }
     }
 
-    Scaffold { paddingValues ->
+    LaunchedEffect(state.shouldNavigateToDetail) {
+        if (state.shouldNavigateToDetail) {
+            state.classification?.className?.let { label ->
+                // Daftar label non-buah yang perlu difilter
+                val nonFruitLabels = listOf("non-buah", "non_buah", "not_fruit", "other")
+                
+                if (label.lowercase() in nonFruitLabels) {
+                    // Tampilkan snackbar jika bukan buah
+                    snackbarHostState.showSnackbar("Ini bukan buah")
+                    viewModel.resetNavigation()
+                } else {
+                    // Navigasi ke detail screen jika buah terdeteksi
+                    navigate(Route.DetailsScreen.createRoute(label))
+                    viewModel.resetNavigation()
+                }
+            }
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             CameraContent(
                 onExitClick = { navigate(Route.HomeScreen.route) },

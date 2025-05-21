@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartnutrition.data.manager.TokenManager
 import com.example.smartnutrition.domain.repository.AuthRepository
-import com.example.smartnutrition.presentation.common.SharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
@@ -40,26 +39,42 @@ class LoginViewModel @Inject constructor(
     fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
-
     fun isValidPassword(password: String): Boolean {
-        return password.length >= 8 // minimal 8 karakter
+        // Minimal 8 karakter
+        if (password.length < 8) {
+            return false
+        }
+
+        // Harus mengandung minimal satu huruf besar
+        var containsUppercase = false
+        for (char in password) {
+            if (char.isUpperCase()) {
+                containsUppercase = true
+                break
+            }
+        }
+
+        return containsUppercase
     }
+//    fun isValidPassword(password: String): Boolean {
+//        return password.length >= 8 // minimal 8 karakter dan harus mengandung huruf besar
+//    }
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
             try {
                 if (email.isBlank() || password.isBlank()) {
-                    _snackbarMessage.value = "Username atau password harus diisi dulu"
+//                    _snackbarMessage.value = "Email atau password harus diisi dulu"
                     return@launch
                 }
 
                 if (!isValidPassword(password)) {
-                    _snackbarMessage.value = "Password minimal 8 karakter"
+//                    _snackbarMessage.value = "Password minimal 8 karakter"
                     return@launch
                 }
                 
                 if (!isValidEmail(email)) {
-                    _snackbarMessage.value = "Format email tidak valid"
+//                    _snackbarMessage.value = "Format email tidak valid"
                     return@launch
                 }
                 

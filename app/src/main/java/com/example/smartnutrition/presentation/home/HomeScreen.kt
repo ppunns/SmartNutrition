@@ -2,11 +2,14 @@ package com.example.smartnutrition.presentation.home
 
 import FruitsCardShimmerEffect
 import android.Manifest
+import android.graphics.Paint.Style
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +18,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -34,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.smartnutrition.R
 import com.example.smartnutrition.presentation.common.PrimaryFloatingActionButton
@@ -44,6 +53,8 @@ import com.example.smartnutrition.presentation.home.components.FruitsCard
 import com.example.smartnutrition.presentation.home.components.NutritionIndicatorCard
 import com.example.smartnutrition.presentation.home.components.SegmentedControl
 import com.example.smartnutrition.presentation.navgraph.Route
+import com.example.smartnutrition.ui.theme.Blue500
+import com.example.smartnutrition.ui.theme.MobileTypography
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
@@ -57,8 +68,88 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
 
-    val cameraPermissionState: PermissionState =
-        rememberPermissionState(Manifest.permission.CAMERA)
+//    val cameraPermissionState: PermissionState =
+//        rememberPermissionState(Manifest.permission.CAMERA)
+
+    var showProteinTargetDialog by remember { mutableStateOf(false) }
+    val proteinTarget by viewModel.proteinTarget.collectAsState()
+
+    LaunchedEffect(proteinTarget) {
+        if (proteinTarget == 0) {
+            showProteinTargetDialog = true
+        }
+    }
+
+    if (showProteinTargetDialog) {
+        AlertDialog(
+            onDismissRequest = { showProteinTargetDialog = false },
+            containerColor = Color.White,
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false // Menonaktifkan lebar default platform
+            ),
+            modifier = Modifier
+                .fillMaxWidth(0.85f),
+            shape = RoundedCornerShape(12.dp),
+            title = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Atur Target Kalori Harianmu",
+                        style = MobileTypography.headlineSmall,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                }
+            },
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Untuk melacak progress harian dengan lebih akurat, yuk atur target kalorimu sekarang.",
+                        style = MobileTypography.labelLarge,
+                        color = Color.Gray,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            },
+            confirmButton = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = { showProteinTargetDialog = false },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(45.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        border = BorderStroke(1.dp, Blue500)
+                    ) {
+                        Text("Nanti Saja", color = Blue500, style = MobileTypography.labelLarge)
+                    }
+                    Button(
+                        onClick = {
+                            showProteinTargetDialog = false
+                            navigate(Route.ProfileScreen.route)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Blue500
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(45.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text("Atur Sekarang", color = Color.White, style = MobileTypography.labelLarge)
+                    }
+                }
+            },
+            dismissButton = null
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Tabs for switching between Daily and Monthly view
@@ -135,11 +226,11 @@ fun HomeScreen(
         ) {
             PrimaryFloatingActionButton(
                 onClick = {
-                    if (cameraPermissionState.status.isGranted) {
+//                    if (cameraPermissionState.status.isGranted) {
                         navigate(Route.CameraScanning.route)
-                    } else {
-                        cameraPermissionState.launchPermissionRequest()
-                    }
+//                    } else {
+//                        cameraPermissionState.launchPermissionRequest()
+//                    }
                 },
                 icon = R.drawable.scanicons,
                 contentDescription = "Scan Buah"

@@ -29,8 +29,7 @@ import coil.compose.AsyncImage
 fun ProfileAvatar(
     photoUrl: String?,
     username: String,
-    size: Int = 160,
-    onEditClick: () -> Unit
+    size: Int = 160
 ) {
     Box(contentAlignment = Alignment.BottomEnd) {
         // Avatar container
@@ -39,8 +38,7 @@ fun ProfileAvatar(
                 .size(size.dp)
                 .clip(CircleShape)
                 .background(Color.LightGray.copy(alpha = 0.3f))
-                .border(2.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), CircleShape)
-                .clickable(onClick = onEditClick),
+                .border(2.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), CircleShape),
             contentAlignment = Alignment.Center
         ) {
             if (photoUrl != null) {
@@ -64,19 +62,19 @@ fun ProfileAvatar(
         }
 
         // Edit button
-        IconButton(
-            onClick = onEditClick,
-            modifier = Modifier
-                .size((size * 0.33).dp) // Edit button is ~1/3 the size of the avatar
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "Edit Profile Photo",
-                tint = Color.White
-            )
-        }
+//        IconButton(
+//            onClick = onEditClick,
+//            modifier = Modifier
+//                .size((size * 0.33).dp) // Edit button is ~1/3 the size of the avatar
+//                .clip(CircleShape)
+//                .background(MaterialTheme.colorScheme.primary)
+//        ) {
+//            Icon(
+//                imageVector = Icons.Default.Edit,
+//                contentDescription = "Edit Profile Photo",
+//                tint = Color.White
+//            )
+//        }
     }
 }
 @Preview(showBackground = true)
@@ -85,8 +83,7 @@ fun ProfileAvatarPreviewNoPhoto() {
     MaterialTheme {
         ProfileAvatar(
             photoUrl = null,
-            username = "Kaspun",
-            onEditClick = {}
+            username = "Kaspun"
         )
     }
 }
@@ -98,7 +95,6 @@ fun ProfileAvatarPreviewWithPhoto() {
         ProfileAvatar(
             photoUrl = "https://example.com/photo.jpg",
             username = "Kaspun",
-            onEditClick = {}
         )
     }
 }

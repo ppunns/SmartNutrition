@@ -1,5 +1,6 @@
 package com.example.smartnutrition.presentation.common
 
+import android.util.Patterns
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,7 +40,7 @@ fun EmailInput(
     isError: Boolean = false,
     errorMessage: String = ""
 ) {
-    val isEmailValid = value.isEmpty() || value.contains("@gmail.com")
+    val isEmailValid = value.isEmpty() || Patterns.EMAIL_ADDRESS.matcher(value).matches()
     val emailError = if (!isEmailValid) "Format email tidak valid. Contoh: email@gmail.com" else errorMessage
 
     OutlinedTextField(
